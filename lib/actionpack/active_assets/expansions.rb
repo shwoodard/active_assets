@@ -3,7 +3,7 @@ module ActiveAssets
 
     def initialize
       @expansions = Hash.new do |expansions, type|
-        expansions[type || :queue] = Hash.new { |typed_exps, name| typed_exps[name] = Expansion.new(name) }
+        expansions[type] = Hash.new { |typed_exps, name| typed_exps[name] = Expansion.new(name) }
       end
     end
 
