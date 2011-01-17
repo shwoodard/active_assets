@@ -4,3 +4,5 @@ pkg/*
 .bundle
 Gemfile.lock
 
+test/fixtures/rails_root/log
+

@@ -1,5 +1,6 @@
 module ActiveAssets
   class Asset < Struct.new(:path, :type, :expansion_name, :group, :cache)
+
     REQUIRED_PROPS = [:path, :type, :expansion_name]
 
     class InvalidContext < StandardError

@@ -1,7 +1,7 @@
 require 'rails/all'
 require 'active_assets/railtie'
 
-module ActiveAssets
+module ActiveAssetsTest
   class Application < Rails::Application
     config.root = File.expand_path('../..', __FILE__)
   end

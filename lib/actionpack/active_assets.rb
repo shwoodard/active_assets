@@ -6,5 +6,7 @@ module ActiveAssets
   autoload :Asset
   autoload :Expansion
   autoload :Assets
+  autoload :Javascripts
+  autoload :Stylesheets
   autoload :Expansions
 end
