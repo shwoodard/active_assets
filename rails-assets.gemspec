@@ -1,10 +1,9 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "rails-assets/version"
 
 Gem::Specification.new do |s|
   s.name        = "rails-assets"
-  s.version     = Rails::Assets::VERSION
+  s.version     = '3.0.3'
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Sam Woodard"]
   s.email       = ["sam@wildfireapp.com"]
@@ -17,7 +16,7 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  s.require_paths = ["lib"]
+  s.require_paths = ["lib", "lib/actionpack"]
 
   s.add_development_dependency "rails", "3.0.3"
 end
