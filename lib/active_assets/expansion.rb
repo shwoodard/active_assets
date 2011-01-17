@@ -63,7 +63,7 @@ module ActiveAssets
       end
 
       def cleanse_path(path)
-        File.join(File.dirname(path) + File.basename(".#{type}"))
+        File.join(File.dirname(path) + File.basename(path, ".#{type}"))
       end
   end
 end
