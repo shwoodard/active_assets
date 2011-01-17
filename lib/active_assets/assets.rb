@@ -48,7 +48,7 @@ module ActiveAssets
 
     def cache!
       all do |expansion|
-        file_path = "#{"#{expansion.namespace}/" if expansion.namespace}#{name}.#{asset_type_short}"
+        file_path = "#{"#{expansion.namespace}/" if expansion.namespace}#{expansion.name}.#{asset_type_short}"
         file_path = Rails.root.join('public', asset_type.pluralize, 'cache', file_path)
 
         paths = expansion.assets.select {|a|
@@ -73,5 +73,5 @@ module ActiveAssets
     def asset_type_short
       asset_type == 'javascript' ? 'js' : 'css'
     end
-  end  
+  end
 end

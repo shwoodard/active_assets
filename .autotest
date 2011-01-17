@@ -2,21 +2,22 @@ require 'autotest/restart'
 require 'autotest/bundler'
 
 Autotest.add_hook :initialize do |at|
-  # We don't want the default mappings
+  # Remove the old test unit mappings
   at.clear_mappings
 
   # Don't track other dirs, this just burns cpu.
-  # (File.read('.gitignore').split("\n")).each do |ignore|
-  #   at.add_exception ignore
-  # end
+  (File.read('.gitignore').split("\n") + Dir['test/{support,fixtures}/**/*']).each do |ignore|
+    next if ignore.nil? or ignore.empty?
+    at.add_exception ignore
+  end
 
   # Test::Unit is normally test_, so autotest doesn't have this mapping. Tests
   # want to match themselves, that is, if there's no changes, run them all.
-  at.add_mapping(%r%^test.*/.*_test\.rb$%) { |f, _| p f }
+  at.add_mapping(%r%^test/.*_test\.rb$%) { |f, _| f }
 
   # Allow for matches of lib files to test files in a flat way
-  at.add_mapping(%r%^lib/(?:.*/)?([^/]+)\.rb$%) do |f, md|
-    at.files_matching %r%^test/lib/.*#{md[1]}_test\.rb$%
+  at.add_mapping(%r%^lib/(.*)\.rb$%) do |f, md|
+    at.files_matching( %r%^test/#{md[1]}_test\.rb$%)
   end
 
   # Make sure that we run all tests if the helper changes:
@@ -27,5 +28,21 @@ Autotest.add_hook :initialize do |at|
   # If bundle did something, run all tests again
   at.add_mapping(%r%^Gemfile\.lock$%) do |f, _|
     at.files_matching %r%.*_test\.rb%
+  end
+
+  def at.path_to_classname(path)
+    file = File.basename(path, '.rb')
+
+    file.gsub!('test_', '')
+    file.gsub!('_test', '')
+    file.capitalize + 'Test'
+  end
+
+end
+
+# If the Gemfile gets updated, run bundle install
+Autotest.add_hook :updated do |at, *args|
+  if args.flatten.grep(%r%^Gemfile$|^.*\.gemspec$%).any?
+    system 'bundle'
   end
 end

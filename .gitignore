@@ -5,4 +5,5 @@ pkg/*
 Gemfile.lock
 
 test/fixtures/rails_root/log
-
+test/fixtures/rails_root/public/stylesheets/cache
+test/fixtures/rails_root/public/javascripts/cache

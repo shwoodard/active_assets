@@ -3,6 +3,15 @@ require 'active_support/hash_with_indifferent_access'
 
 module ActiveAssets
   class Expansion
+    class DuplicateAssetError < StandardError
+      attr_reader :expansion, :asset
+
+      def initialize(expansion, asset)
+        @expansion, @asset = expansion, asset
+        super("Trying to add, #{asset.path}, failed.  Asset definition for this path already exists for this #{expansion.type} expansion, #{expansion.name}.")
+      end
+    end
+
     attr_reader :type, :name, :assets, :namespace
     alias_method :all, :assets
     delegate :empty?, :to => :assets
@@ -27,6 +36,7 @@ module ActiveAssets
       members = options.values_at(*Asset.members)
       a = Asset.new(*members)
       a.valid!
+      raise DuplicateAssetError.new(self, a) if asset_exists?(a)
       @assets << a
     end
     alias_method :a, :asset
@@ -43,5 +53,17 @@ module ActiveAssets
       raise NoMethodError, "Cannot call namespace from within expansion." if block_given?
       @namespace
     end
+
+    private
+
+      def asset_exists?(asset)
+        @assets.any? do |a|
+          cleanse_path(asset.path) == cleanse_path(a.path)
+        end
+      end
+
+      def cleanse_path(path)
+        File.join(File.dirname(path) + File.basename(".#{type}"))
+      end
   end
 end

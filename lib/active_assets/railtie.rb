@@ -1,5 +1,5 @@
 require "rails"
-require "actionpack/active_assets"
+require "active_assets"
 
 module ActiveAssets
   class Railtie < Rails::Railtie
