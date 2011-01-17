@@ -2,7 +2,7 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
-  s.name        = "rails-assets"
+  s.name        = "active_assets"
   s.version     = '3.0.3'
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Sam Woodard"]
