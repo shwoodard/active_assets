@@ -1,4 +1,4 @@
-require 'rails'
+require 'active_assets'
 
 module Rails
   module ActiveAssets
