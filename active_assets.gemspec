@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib", "lib/actionpack"]
 
   s.add_development_dependency "rails", "3.0.3"
+  s.add_development_dependency "ZenTest"
 end
