@@ -1,16 +1,10 @@
 require "rails"
-require "active_assets"
+require "rails/active_assets"
 
 module ActiveAssets
   class Railtie < Rails::Railtie
-    initializer :extend_active_assets do
-      Rails.application.extend(Module.new do
-        def expansions(&blk)
-          @expansions ||= Expansions.new
-          @expansions.instance_eval(&blk) if block_given?
-          @expansions
-        end
-      end)
+    initializer :active_assets_extend_application do
+      Rails.application.extend(Rails::ActiveAssets)
     end
 
     initializer :load_active_assets do
