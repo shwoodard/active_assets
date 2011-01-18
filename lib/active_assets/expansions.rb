@@ -1,5 +1,6 @@
 module ActiveAssets
   class Expansions
+    include TypeInferrable
 
     def initialize
       @expansions = Hash.new do |expansions, type|
@@ -21,9 +22,12 @@ module ActiveAssets
 
     def asset(path, options = {})
       options = HashWithIndifferentAccess.new(options)
-      inferred_type = ['.js', '.css'].include?(File.extname(path)) && File.extname(path)[1..-1].to_sym
       current_expansion_name, current_expansion_options = @current_expansion_config
-      options.reverse_merge!(:type => @current_type || inferred_type, :expansion_name => current_expansion_name, :group => @current_groups)
+      options.reverse_merge!(
+        :type => @current_type || inferred_type(path),
+        :expansion_name => current_expansion_name,
+        :group => @current_groups
+      )
       raise Asset::InvalidContext unless options[:type] && options[:expansion_name]
 
       expansion_options = {:type => options[:type]}.reverse_merge(current_expansion_options || {})

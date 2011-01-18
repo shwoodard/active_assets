@@ -3,6 +3,8 @@ require 'active_support/hash_with_indifferent_access'
 
 module ActiveAssets
   class Expansion
+    include TypeInferrable
+
     attr_reader :type, :name, :assets, :namespace
     alias_method :all, :assets
     delegate :empty?, :to => :assets
@@ -21,8 +23,7 @@ module ActiveAssets
     def asset(path, options = {})
       options = HashWithIndifferentAccess.new(options)
       options.assert_valid_keys(*Asset.members)
-      inferred_type = ['.js', '.css'].include?(File.extname(path)) && File.extname(path)[1..-1].to_sym
-      options.reverse_merge!(:type => @current_type || type || inferred_type, :expansion_name => name, :group => @current_groups)
+      options.reverse_merge!(:type => @current_type || type || inferred_type(path), :expansion_name => name, :group => @current_groups)
       options.merge!(:path => path)
       members = options.values_at(*Asset.members)
       a = Asset.new(*members)

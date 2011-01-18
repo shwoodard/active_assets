@@ -4,6 +4,7 @@ module ActiveAssets
   extend ActiveSupport::Autoload
 
   autoload :Asset
+  autoload :TypeInferrable
   autoload :Expansion
   autoload :Assets
   autoload :Javascripts
