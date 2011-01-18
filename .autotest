@@ -33,7 +33,7 @@ Autotest.add_hook :initialize do |at|
   end
 
   # If update support, run all tests
-  at.add_mapping(%r%^test/support/.*\.rb$%) do |f, md|
+  at.add_mapping(%r%^test/support/.*\.rb$%) do |f, _|
     at.files_matching %r%.*_test\.rb%
   end
 
