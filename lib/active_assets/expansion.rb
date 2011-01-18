@@ -32,7 +32,7 @@ module ActiveAssets
         :expansion_name => name,
         :group => @current_groups
       )
-      options.merge!(:path => path)
+      options.update(:path => path)
 
       members = options.values_at(*Asset.members)
       a = Asset.new(*members)
