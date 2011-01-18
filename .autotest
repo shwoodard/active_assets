@@ -2,6 +2,8 @@ require 'autotest/restart'
 require 'autotest/bundler'
 
 Autotest.add_hook :initialize do |at|
+  at.testlib = 'test/unit test/autocolor'
+
   # Remove the old test unit mappings
   at.clear_mappings
 
