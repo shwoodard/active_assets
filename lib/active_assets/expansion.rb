@@ -28,7 +28,7 @@ module ActiveAssets
       inferred_type, extension = inferred_type(path)
 
       options.reverse_merge!(
-        :type => type || inferred_type || @current_type || extension,
+        :type => inferred_type || @current_type || extension || type,
         :expansion_name => name,
         :group => @current_groups
       )
