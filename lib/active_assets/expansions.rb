@@ -3,9 +3,7 @@ module ActiveAssets
     include TypeInferrable
 
     def initialize
-      @expansions = Hash.new do |expansions, type|
-        expansions[type] = Hash.new { |typed_exps, name| typed_exps[name] = Expansion.new(name) }
-      end
+      @expansions = Hash.new(&method(:build_expansions_hash_with_defaults))
     end
 
     def register(&blk)
@@ -21,31 +19,32 @@ module ActiveAssets
     end
 
     def asset(path, options = {})
-      options = HashWithIndifferentAccess.new(options)
-      current_expansion_name, current_expansion_options = @current_expansion_config
-      options.reverse_merge!(
-        :type => @current_type || inferred_type(path),
-        :expansion_name => current_expansion_name,
+      deferred_expansion_name, deferred_expansion_options = @deferred_expansion_config
+      inferred_type, extension = inferred_type(path)
+
+      options = HashWithIndifferentAccess.new(options).reverse_merge(
+        :type => inferred_type || @current_type,
+        :expansion_name => deferred_expansion_name,
         :group => @current_groups
       )
-      raise Asset::InvalidContext unless options[:type] && options[:expansion_name]
 
-      expansion_options = {:type => options[:type]}.reverse_merge(current_expansion_options || {})
-      begin
-        @expansions[options[:type]][options[:expansion_name]].configure(expansion_options).asset(path, options)
-      rescue Asset::InvalidContext
-        @expansions[options[:type]].delete(options[:expansion_name]) if @expansions[options[:type]][options[:expansion_name]].empty?
-        raise
+      expansion_options = (deferred_expansion_options || {}).merge(:type => options[:type])
+
+      @expansions[options[:type] || extension][options[:expansion_name]].configure(expansion_options) do
+        asset(path, options)
       end
     end
     alias_method :a, :asset
     alias_method :`, :asset
 
     def expansion(name, options = {}, &blk)
-      options.update(:type => @current_type) if @current_type
-      options.update(:namespace => @current_namespace) if @current_namespace
-      current_expansion_config(name, options, &blk) unless options[:type]
-      @expansions[options[:type]][name].configure(options, &blk) if options[:type]
+      options.reverse_merge!(:type => @current_ytpe, :namespace => @current_namespace)
+
+      if (options[:type] == :deferred && options.delete(:type)) || options[:type].present?
+        @expansions[options[:type]][name].configure(options, &blk)
+      else
+        defer_expansion(name, options, &blk)
+      end
     end
 
     def group(*groups, &blk)
@@ -80,11 +79,11 @@ module ActiveAssets
     end
 
     private
-      def current_expansion_config(name, options, &blk)
-        @current_expansion_config = [name, options]
+      def defer_expansion(name, options, &blk)
+        @deferred_expansion_config = [name, options]
         instance_eval(&blk)
       ensure
-        @current_expansion_config = nil
+        @deferred_expansion_config = nil
       end
 
       def current_type(type, &blk)
@@ -94,5 +93,18 @@ module ActiveAssets
         @current_type = nil
       end
 
+      def build_expansions_hash_with_defaults(expansions, expansion_type)
+        raise Asset::AmbiguousContext.new(:type) if expansion_type.blank?
+        raise Asset::InvalidAssetType.new(expansion_type) unless Asset::VALID_TYPES.include?(expansion_type.to_sym)
+
+        expansions[expansion_type.to_sym] = build_typed_expansion_hash_with_defaults
+      end
+
+      def build_typed_expansion_hash_with_defaults
+        Hash.new do |typed_expansions, expansion_name|
+          raise Asset::AmbiguousContext.new(:name) if expansion_name.blank?
+          typed_expansions[expansion_name] = Expansion.new(expansion_name)
+        end
+      end
   end
 end

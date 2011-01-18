@@ -125,4 +125,24 @@ class ExpansionsTest < Test::Unit::TestCase
     assert Rails.application.expansions.stylesheets.has_expansion?(:dev)
   end
 
+  def test_asset_9
+    assert_raise ActiveAssets::Asset::InvalidAssetType do
+      Rails.application.expansions do
+        expansion :foo do
+          `bas/bar.pdf`
+        end
+      end
+    end
+  end
+
+  def test_asset_10
+    assert_raise ActiveAssets::Asset::AmbiguousContext do
+      Rails.application.expansions do
+        expansion :foo do
+          `vendor/jquery.mousewheel`
+        end
+      end
+    end
+  end
+
 end

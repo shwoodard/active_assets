@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module ActiveAssets
   class Assets
     attr_reader :expansions
@@ -40,7 +42,7 @@ module ActiveAssets
           expansion.assets.select {|a| a.group == :all || Array(a.group).any? {|e| Rails.env.send(:"#{e}?") } }.map(&:path)
         end
 
-        paths.map! {|path| File.join(File.dirname(path), File.basename(path, ".#{asset_type_short}")) }
+        cleanse_paths!(paths)
 
         ActionView::Helpers::AssetTagHelper.send(:"register_#{asset_type}_expansion", expansion.name => paths)
       end
@@ -58,9 +60,10 @@ module ActiveAssets
           Array(a.group).any? {|e| Rails.env.send(:"#{e}?") })
         }.map(&:path)
 
-        paths.map! {|path| File.join(File.dirname(path), File.basename(path, ".#{asset_type_short}")) }
+        cleanse_paths!(paths)
 
         FileUtils.mkdir_p(File.dirname(file_path))
+
         File.open(file_path, 'w+') do |f|
           paths.each do |path|
             in_file = Rails.root.join('public', asset_type.pluralize, "#{path}.#{asset_type_short}")
@@ -70,8 +73,13 @@ module ActiveAssets
       end
     end
 
-    def asset_type_short
-      asset_type == 'javascript' ? 'js' : 'css'
-    end
+    private
+      def asset_type_short
+        asset_type == 'javascript' ? 'js' : 'css'
+      end
+
+      def cleanse_paths!(paths)
+        paths.map! {|path| File.join(File.dirname(path), File.basename(path, ".#{asset_type_short}")) }
+      end
   end
 end

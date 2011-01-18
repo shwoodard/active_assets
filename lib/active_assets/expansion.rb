@@ -23,10 +23,19 @@ module ActiveAssets
     def asset(path, options = {})
       options = HashWithIndifferentAccess.new(options)
       options.assert_valid_keys(*Asset.members)
-      options.reverse_merge!(:type => @current_type || type || inferred_type(path), :expansion_name => name, :group => @current_groups)
+      
+      inferred_type, extension = inferred_type(path)
+
+      options.reverse_merge!(
+        :type => @current_type || type || inferred_type || extension,
+        :expansion_name => name,
+        :group => @current_groups
+      )
       options.merge!(:path => path)
+
       members = options.values_at(*Asset.members)
       a = Asset.new(*members)
+
       a.valid!
       @assets << a
     end
