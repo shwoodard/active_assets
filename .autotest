@@ -8,7 +8,7 @@ Autotest.add_hook :initialize do |at|
   at.clear_mappings
 
   # Don't track other dirs, this just burns cpu.
-  (File.read('.gitignore').split("\n") + Dir['test/{support,fixtures}/**/*']).each do |ignore|
+  (File.read('.gitignore').split("\n") + Dir['test/fixtures/**/*']).each do |ignore|
     next if ignore.nil? or ignore.empty?
     at.add_exception ignore
   end
@@ -29,6 +29,11 @@ Autotest.add_hook :initialize do |at|
 
   # If bundle did something, run all tests again
   at.add_mapping(%r%^Gemfile\.lock$%) do |f, _|
+    at.files_matching %r%.*_test\.rb%
+  end
+
+  # If update support, run all tests
+  at.add_mapping(%r%^test/support/.*\.rb$%) do |f, md|
     at.files_matching %r%.*_test\.rb%
   end
 
