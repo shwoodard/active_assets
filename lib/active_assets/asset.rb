@@ -28,6 +28,7 @@ module ActiveAssets
     class InvalidAssetType < StandardError
       attr_reader :invalid_type
       def initilaize(invalid_type)
+        @invalid_type = invalid_type
         super("#{invalid_type} is not a recognized asset type.")
       end
     end
