@@ -2,17 +2,7 @@ require 'helper'
 
 class ExpansionsTest < Test::Unit::TestCase
   def setup
-    Rails.application.config.action_controller.perform_caching = false
-
-    if File.exists?(File.join(rails_root, 'config/assets.rb'))
-      load File.join(rails_root, 'config/assets.rb')
-    elsif File.directory?(File.join(rails_root, 'config/assets'))
-      Dir[File.join(rails_root, 'config/assets/*.rb')].each do |f|
-        load f
-      end if Rails.application && Rails.application.instance_variable_defined?(:@ran)
-    end
-
-    ActiveAssetsTest::Application.initialize! unless Rails.application && Rails.application.instance_variable_defined?(:@ran)
+    initialize_application_or_load_assets!
   end
 
   def teardown
