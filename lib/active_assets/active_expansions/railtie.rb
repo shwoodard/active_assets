@@ -1,9 +1,16 @@
 require "rails"
 require "rails/active_assets"
+require 'active_support/ordered_options'
 
 module ActiveAssets
   module ActiveExpansions
     class Railtie < Rails::Railtie
+      rake_tasks do
+        Dir[File.expand_path("../../../tasks/*.rake", __FILE__)].each {|f| load f}
+      end
+
+      config.active_expansions = ActiveSupport::OrderedOptions.new
+
       initializer :active_assets_extend_application do
         Rails.application.extend(Rails::ActiveAssets)
       end
@@ -17,8 +24,15 @@ module ActiveAssets
         Rails.application.expansions.javascripts.register! and Rails.application.expansions.stylesheets.register!
       end
 
+      initializer :set_active_expansion_configs do
+        options = config.active_expansions
+        ActiveSupport.on_load(:active_expansions) do
+          options.each { |k,v| send("#{k}=", v) }
+        end
+      end
+
       initializer :cache_active_assets do
-        if ActionController::Base.perform_caching
+        if Expansions.precache_assets
           Rails.application.expansions.javascripts.cache! and Rails.application.expansions.stylesheets.cache!
         end
       end

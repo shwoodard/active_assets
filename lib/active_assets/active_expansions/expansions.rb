@@ -1,8 +1,13 @@
+require 'active_support/configurable'
+
 module ActiveAssets
   module ActiveExpansions
     class Expansions
       include AssetScope
       include TypeInferrable
+      include ActiveSupport::Configurable
+      include Configurable
+      ActiveSupport.run_load_hooks(:active_expansions, self)
 
       def initialize
         @expansions = Hash.new(&method(:build_expansions_hash_with_defaults))
@@ -93,7 +98,6 @@ module ActiveAssets
           o.update(:type => asset_type) if asset_type
           o
         end
-
     end
   end
 end

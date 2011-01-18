@@ -37,7 +37,11 @@ module ActiveAssets
       def register!
         all do |expansion|
           paths = if ActionController::Base.perform_caching
-            group_assets = expansion.assets.select {|a| Array(a.group).include?(:deploy) || Array(a.group).any? {|e| Rails.env.send(:"#{e}?") }}
+            group_assets = expansion.assets.select do |a|
+              Array(a.group).include?(:deploy) ||
+              Array(a.group).any? {|e| e.to_s != 'all' && Rails.env.send(:"#{e}?") }
+            end
+
             group_assets.map(&:path) + [File.join("cache#{"/#{expansion.namespace}" if expansion.namespace}", expansion.name.to_s)]
           else
             expansion.assets.select {|a| a.group == :all || Array(a.group).any? {|e| Rails.env.send(:"#{e}?") } }.map(&:path)
@@ -80,7 +84,13 @@ module ActiveAssets
         end
 
         def cleanse_paths!(paths)
-          paths.map! {|path| File.join(File.dirname(path), File.basename(path, ".#{asset_type_short}")) }
+          paths.map! do |path|
+            if path =~ %r{^https?}
+              path
+            else
+              File.join(File.dirname(path), File.basename(path, ".#{asset_type_short}"))
+            end
+          end
         end
     end
   end

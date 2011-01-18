@@ -7,6 +7,7 @@ module ActiveAssets
     autoload :Asset
     autoload :AssetScope
     autoload :TypeInferrable
+    autoload :Configurable
     autoload :Expansion
     autoload :Assets
     autoload :Javascripts
