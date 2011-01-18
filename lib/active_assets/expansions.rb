@@ -40,7 +40,7 @@ module ActiveAssets
     def expansion(name, options = {}, &blk)
       options.reverse_merge!(:type => @current_ytpe, :namespace => @current_namespace)
 
-      if (options[:type] == :deferred && options.delete(:type)) || options[:type].present?
+      if options[:type].present?
         @expansions[options[:type]][name].configure(options, &blk)
       else
         defer_expansion(name, options, &blk)
