@@ -1,6 +1,7 @@
 module ActiveAssets
   class Expansions
     include TypeInferrable
+    include TypeScope
 
     def initialize
       @expansions = Hash.new(&method(:build_expansions_hash_with_defaults))
@@ -54,14 +55,6 @@ module ActiveAssets
       @current_groups = nil
     end
 
-    def js(&blk)
-      current_type :js, &blk
-    end
-
-    def css(&blk)
-      current_type :css, &blk
-    end
-
     def javascripts
       Javascripts.new(@expansions[:js])
     end
@@ -84,13 +77,6 @@ module ActiveAssets
         instance_eval(&blk)
       ensure
         @deferred_expansion_config = nil
-      end
-
-      def current_type(type, &blk)
-        @current_type = type
-        instance_eval(&blk)
-      ensure
-        @current_type = nil
       end
 
       def build_expansions_hash_with_defaults(expansions, expansion_type)
