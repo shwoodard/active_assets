@@ -4,7 +4,7 @@ require 'active_support/hash_with_indifferent_access'
 module ActiveAssets
   module ActiveExpansions
     class Expansion
-      include AssetsScope
+      include AssetScope
       include TypeInferrable
 
       attr_reader :type, :name, :assets, :namespace

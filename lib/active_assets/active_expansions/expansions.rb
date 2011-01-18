@@ -1,7 +1,7 @@
 module ActiveAssets
   module ActiveExpansions
     class Expansions
-      include AssetsScope
+      include AssetScope
       include TypeInferrable
 
       def initialize

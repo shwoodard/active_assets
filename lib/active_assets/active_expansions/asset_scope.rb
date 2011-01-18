@@ -1,6 +1,6 @@
 module ActiveAssets
   module ActiveExpansions
-    module AssetsScope
+    module AssetScope
       def group(*groups, &blk)
         @current_groups = groups
         instance_eval(&blk)
