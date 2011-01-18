@@ -1,5 +1,12 @@
 module ActiveAssets
-  module TypeScope
+  module AssetsScope
+    def group(*groups, &blk)
+      @current_groups = groups
+      instance_eval(&blk)
+    ensure
+      @current_groups = nil
+    end
+
     def js(&blk)
       current_type :js, &blk
     end
@@ -15,6 +22,6 @@ module ActiveAssets
       ensure
         @current_type = nil
       end
-      
+
   end
 end

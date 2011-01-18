@@ -1,7 +1,7 @@
 module ActiveAssets
   class Expansions
+    include AssetsScope
     include TypeInferrable
-    include TypeScope
 
     def initialize
       @expansions = Hash.new(&method(:build_expansions_hash_with_defaults))
@@ -29,8 +29,9 @@ module ActiveAssets
         :group => @current_groups
       )
 
-      expansion_options = (deferred_expansion_options || {}).merge(:type => options[:type])
+      expansion_options = update_expansion_options(deferred_expansion_options || {}, options[:type])
 
+      # asset call below is executed in the scope of the ActiveAssets::Expansion
       @expansions[options[:type] || extension][options[:expansion_name]].configure(expansion_options) do
         asset(path, options)
       end
@@ -39,20 +40,13 @@ module ActiveAssets
     alias_method :`, :asset
 
     def expansion(name, options = {}, &blk)
-      options.reverse_merge!(:type => @current_ytpe, :namespace => @current_namespace)
+      options = update_expansion_options(options)
 
       if options[:type].present?
         @expansions[options[:type]][name].configure(options, &blk)
       else
         defer_expansion(name, options, &blk)
       end
-    end
-
-    def group(*groups, &blk)
-      @current_groups = groups
-      instance_eval(&blk)
-    ensure
-      @current_groups = nil
     end
 
     def javascripts
@@ -91,6 +85,12 @@ module ActiveAssets
           raise Asset::AmbiguousContext.new(:name) if expansion_name.blank?
           typed_expansions[expansion_name] = Expansion.new(expansion_name)
         end
+      end
+
+      def update_expansion_options(options, asset_type = nil)
+        o = options.reverse_merge(:type => @current_ytpe, :namespace => @current_namespace)
+        o.update(:type => asset_type) if asset_type
+        o
       end
   end
 end

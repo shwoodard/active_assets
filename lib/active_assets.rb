@@ -4,7 +4,7 @@ module ActiveAssets
   extend ActiveSupport::Autoload
 
   autoload :Asset
-  autoload :TypeScope
+  autoload :AssetsScope
   autoload :TypeInferrable
   autoload :Expansion
   autoload :Assets
