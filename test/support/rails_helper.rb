@@ -2,7 +2,7 @@ require 'fileutils'
 
 module RailsHelper
   def rails_root
-    @rails_root = File.expand_path('../../fixtures/rails_root', __FILE__)
+    @rails_root = TEST_RAILS_ROOT
   end
 
   def delete_cached_assets!
