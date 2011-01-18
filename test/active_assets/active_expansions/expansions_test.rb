@@ -12,7 +12,7 @@ class ExpansionsTest < Test::Unit::TestCase
 
   def test_new
     assert_nothing_raised do
-      ActiveAssets::Expansions.new
+      ActiveAssets::ActiveExpansions::Expansions.new
     end
   end
 
@@ -126,7 +126,7 @@ class ExpansionsTest < Test::Unit::TestCase
   end
 
   def test_asset_9
-    assert_raise ActiveAssets::Asset::InvalidAssetType do
+    assert_raise ActiveAssets::ActiveExpansions::Asset::InvalidAssetType do
       Rails.application.expansions do
         expansion :foo do
           `bas/bar.pdf`
@@ -136,7 +136,7 @@ class ExpansionsTest < Test::Unit::TestCase
   end
 
   def test_asset_10
-    assert_raise ActiveAssets::Asset::AmbiguousContext do
+    assert_raise ActiveAssets::ActiveExpansions::Asset::AmbiguousContext do
       Rails.application.expansions do
         expansion :foo do
           `vendor/jquery.mousewheel`

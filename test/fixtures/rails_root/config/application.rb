@@ -1,5 +1,5 @@
 require 'rails/all'
-require 'active_assets/railtie'
+require 'active_assets/active_expansions/railtie'
 
 module ActiveAssetsTest
   class Application < Rails::Application
