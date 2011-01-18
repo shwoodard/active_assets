@@ -56,6 +56,7 @@ class ExpansionsTest < Test::Unit::TestCase
   
     assert Rails.application.expansions.javascripts.has_expansion?(:foo)
     assert_equal :js, Rails.application.expansions.javascripts[:foo].type
+    assert Rails.application.expansions.javascripts.all.map(&:assets).flatten.any? {|a| "bar/bas" == a.path}
   end
   
   def test_asset_2
@@ -67,6 +68,7 @@ class ExpansionsTest < Test::Unit::TestCase
   
     assert Rails.application.expansions.javascripts.has_expansion?(:foo)
     assert_equal :js, Rails.application.expansions.javascripts[:foo].type
+    assert Rails.application.expansions.javascripts.all.map(&:assets).flatten.any? {|a| "bar/bas.js" == a.path}
   end
   
   def test_asset_3
@@ -76,6 +78,7 @@ class ExpansionsTest < Test::Unit::TestCase
   
     assert Rails.application.expansions.javascripts.has_expansion?(:foo)
     assert_equal :js, Rails.application.expansions.javascripts[:foo].type
+    assert Rails.application.expansions.javascripts.all.map(&:assets).flatten.any? {|a| "bar/bas" == a.path}
   end
   
   def test_asset_4
@@ -85,6 +88,7 @@ class ExpansionsTest < Test::Unit::TestCase
   
     assert Rails.application.expansions.javascripts.has_expansion?(:foo)
     assert_equal :js, Rails.application.expansions.javascripts[:foo].type
+    assert Rails.application.expansions.javascripts.all.map(&:assets).flatten.any? {|a| "bar/bas.js" == a.path}
   end
   
   def test_asset_5
@@ -96,6 +100,7 @@ class ExpansionsTest < Test::Unit::TestCase
   
     assert Rails.application.expansions.javascripts.has_expansion?(:foo)
     assert_equal :js, Rails.application.expansions.javascripts[:foo].type
+    assert Rails.application.expansions.javascripts.all.map(&:assets).flatten.any? {|a| "bar/bas" == a.path}
   end
   
   def test_asset_6
@@ -107,11 +112,17 @@ class ExpansionsTest < Test::Unit::TestCase
   
     assert Rails.application.expansions.stylesheets.has_expansion?(:foo)
     assert_equal :css, Rails.application.expansions.stylesheets[:foo].type
+    assert Rails.application.expansions.stylesheets.all.map(&:assets).flatten.any? {|a| "bar/bas" == a.path}
   end
 
   def test_asset_7
     assert Rails.application.expansions.javascripts.has_expansion?(:jazz)
     assert Rails.application.expansions.stylesheets.has_expansion?(:jazz)
+  end
+
+  def test_asset_8
+    assert Rails.application.expansions.javascripts.has_expansion?(:dev)
+    assert Rails.application.expansions.stylesheets.has_expansion?(:dev)
   end
 
 end

@@ -31,6 +31,7 @@ Rails.application.expansions.register do
     end
   end
 
+  # for ExpansionsTest#asset_test_8
   group :development do
     expansion :dev do
       asset 'bas/bar', :type => :js
