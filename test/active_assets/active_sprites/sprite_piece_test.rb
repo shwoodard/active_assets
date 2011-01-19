@@ -28,6 +28,7 @@ class SpritePiecetest < Test::Unit::TestCase
     Rails.application.sprites do
       sprite :sprite2 do
         _"sprite_images/sprite1/1.png" => ".klass_1", :x => '0', :y => '320px'
+        _"sprite_images/sprite1/2.png" => ".klass_2"
       end
     end
 
