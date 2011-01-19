@@ -145,4 +145,18 @@ class ExpansionsTest < Test::Unit::TestCase
     end
   end
 
+  def test_expansion_1
+    Rails.application.expansions do
+      expansion :foo do
+        `vendor/jquery.mousewheel.js`
+      end
+
+      expansion :foo do
+        `bar/bas.js`
+      end
+    end
+
+    assert_equal %w{vendor/jquery.mousewheel.js bar/bas.js}, Rails.application.expansions.javascripts[:foo].assets.map(&:path)
+  end
+
 end

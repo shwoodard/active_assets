@@ -4,4 +4,5 @@ module ActiveAssets
   extend ActiveSupport::Autoload
 
   autoload :ActiveExpansions
+  autoload :ActiveSprites
 end
