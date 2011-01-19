@@ -6,6 +6,7 @@ class SpritesTest < Test::Unit::TestCase
   end
 
   def teardown
+    Rails.application.sprites.clear
   end
 
   def test_describe

@@ -1,26 +1,55 @@
 module ActiveAssets
   module ActiveSprites
     class SpritePiece
-      class Mapping
-        attr_reader :path, :css_selector
-        def initialize(mapping)
-          @path, @css_selector = mapping.keys.first, mapping[mapping.keys.first]
+      class ValidationError < StandardError
+        attr_reader :sprite_piece, :missing_fields
+        def initialize(sprite_piece, missing_fields)
+          @sprite, @missing_fields = sprite_piece, missing_fields
+          super("#{"Your sprite piece could not be created.  " if @sprite_piece.nil?}  Your sprite piece is invalid. It is missing the following fields: #{@missing_fields.join(', ')}")
         end
       end
 
-      delegate :path, :css_selector, :to => :mapping
+      class Mapping
+        attr_reader :path, :css_selector
 
-      def initialize(mapping)
-        @mapping = mapping
+        def initialize(path, css_selector)
+          @path, @css_selector = path, css_selector
+        end
+
+        def self.find_mapping(options)
+          options.find {|k, v| k.is_a?(String) }
+        end
       end
 
-      def configure(options = {}, &blk)
+      GEOMETRY_PROPS = [:x, :y, :width, :height]
+      attr_reader(*GEOMETRY_PROPS)
+      delegate :path, :css_selector, :to => :mapping
+
+      def initialize
+      end
+
+      def configure(mapping, options = {}, &blk)
+        @mapping = mapping
+        options.each {|k,v| send(k, v)}
+        instance_eval(&blk) if block_given?
+        self
+      end
+
+      GEOMETRY_PROPS.each do |prop|
+        eval <<-METH
+          def #{prop}(*args)
+            #{prop}, *_ = args
+            @#{prop} = #{prop} if #{prop}
+            @#{prop}
+          end
+        METH
       end
 
       private
         def mapping
           @mapping
         end
+
     end
   end
 end

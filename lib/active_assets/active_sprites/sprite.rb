@@ -20,8 +20,9 @@ module ActiveAssets
       attr_reader :path, :name, :orientation
 
       def initialize
-        @sprite_pieces = Hash.new do |sprite_pieces, mapping|
-          sprite_pieces[mapping.path] = SpritePiece.new(mapping)
+        @sprite_pieces = Hash.new do |sprite_pieces, path|
+          raise SpritePiece::ValidationError.new(nil, [:path]) if path.blank?
+          sprite_pieces[path] = SpritePiece.new
         end
       end
 
@@ -34,6 +35,10 @@ module ActiveAssets
         @sprite_pieces[path]
       end
 
+      def paths
+        @sprite_pieces.keys
+      end
+
       def configure(name_or_path, options = {}, &blk)
         @path ||= name_or_path.to_s
         @name = options.delete(:as) || name_or_path
@@ -43,9 +48,11 @@ module ActiveAssets
         self
       end
 
-      def sprite_piece(mapping, options = nil)
-        mapping = SpritePiece::Mapping.new(mapping)
-        @sprite_pieces[mapping].configure(options || {})
+      def sprite_piece(options, &blk)
+        path, css_selector = SpritePiece::Mapping.find_mapping(options)
+        options.delete(path)
+        mapping = SpritePiece::Mapping.new(path, css_selector)
+        @sprite_pieces[path].configure(mapping, options, &blk)
       end
       alias_method :sp, :sprite_piece
       alias_method :_, :sprite_piece

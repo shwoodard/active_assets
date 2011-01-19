@@ -12,4 +12,8 @@ load File.join(TEST_RAILS_ROOT, 'config/application.rb')
 
 class Test::Unit::TestCase
   include RailsHelper
+
+  def sprites
+    Rails.application.sprites
+  end
 end
