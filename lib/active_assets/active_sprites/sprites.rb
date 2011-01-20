@@ -22,7 +22,7 @@ module ActiveAssets
         when Hash
           options = args.shift
           args = *options.find {|k,v| k.is_a?(String) }
-          args << options
+          (args << options).tap {|arg| args.last.delete(args.first)}
         when Symbol
           # todo make default paths configurable
           ["sprites/#{args.first.to_s}.png", "sprites/#{args.first.to_s}.css", args.extract_options!, args.first]
