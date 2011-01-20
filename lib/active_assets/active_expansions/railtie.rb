@@ -1,5 +1,5 @@
 require "rails"
-require "rails/active_assets/active_expansions"
+require "rails/active_expansions"
 require 'active_support/ordered_options'
 
 module ActiveAssets
