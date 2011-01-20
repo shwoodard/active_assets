@@ -1,37 +1,38 @@
 require "rails"
-require "rails/active_assets"
+require "rails/active_assets/active_expansions"
 require 'active_support/ordered_options'
 
 module ActiveAssets
   module ActiveExpansions
     class Railtie < Rails::Railtie
       rake_tasks do
-        Dir[File.expand_path("../../../tasks/*.rake", __FILE__)].each {|f| load f}
+        Dir[File.expand_path("../../../tasks/active_expansions/*.rake", __FILE__)].each {|f| load f}
       end
 
       config.active_expansions = ActiveSupport::OrderedOptions.new
 
-      initializer :active_assets_extend_application do
-        Rails.application.extend(Rails::ActiveAssets)
+      initializer 'active_expansion-extend-application' do
+        Rails.application.extend(Rails::ActiveExpansions)
       end
 
-      initializer :load_active_assets do
+      initializer 'active_expansions-load-definitons' do
         load_active_assets(Rails.root)
         Rails.application.railties.engines.each {|e| load_active_assets(e.root) }
       end
 
-      initializer :register_active_assets_expansions do
-        Rails.application.expansions.javascripts.register! and Rails.application.expansions.stylesheets.register!
+      initializer 'active_expansions-register' do
+        Rails.application.expansions.javascripts.register!
+        Rails.application.expansions.stylesheets.register!
       end
 
-      initializer :set_active_expansion_configs do
+      initializer 'active_expansions-set-configs' do
         options = config.active_expansions
         ActiveSupport.on_load(:active_expansions) do
           options.each { |k,v| send("#{k}=", v) }
         end
       end
 
-      initializer :cache_active_assets do
+      initializer 'active_expansions-cache' do
         if Expansions.precache_assets
           Rails.application.expansions.javascripts.cache! and Rails.application.expansions.stylesheets.cache!
         end
