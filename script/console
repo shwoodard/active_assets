@@ -1,0 +1,1 @@
+irb -I./test/fixtures/rails_root -rrubygems -rbundler/setup -rconfig/environment
