@@ -24,4 +24,12 @@ class SpritesTest < Test::Unit::TestCase
        end
      end
   end
+
+  def test_sprite_with_mapping
+    Rails.application.sprites do
+      sprite 'sprites/global.png' => 'sprites/global.css'
+    end
+
+    assert_equal 'sprites/global.css', Rails.application.sprites['sprites/global.png'].stylesheet_path
+  end
 end

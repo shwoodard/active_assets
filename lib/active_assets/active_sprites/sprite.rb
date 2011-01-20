@@ -1,7 +1,7 @@
 module ActiveAssets
   module ActiveSprites
     class Sprite
-      REQUIRED_PROPS = [:path, :orientation]
+      REQUIRED_PROPS = [:path, :stylesheet_path, :orientation]
 
       class ValidationError < StandardError
         attr_reader :sprite, :missing_fields
@@ -17,7 +17,7 @@ module ActiveAssets
         end
       end
 
-      attr_reader :path, :name, :orientation
+      attr_reader :path, :stylesheet_path, :name, :orientation
 
       def initialize
         @sprite_pieces = Hash.new do |sprite_pieces, path|
@@ -39,9 +39,10 @@ module ActiveAssets
         @sprite_pieces.keys
       end
 
-      def configure(name_or_path, options = {}, &blk)
-        @path ||= name_or_path.to_s
-        @name = options.delete(:as) || name_or_path
+      def configure(sprite_path, stylesheet_path, options = {}, &blk)
+        @path ||= sprite_path
+        @name = options.delete(:as) || sprite_path
+        @stylesheet_path = stylesheet_path
         @orientation = options[:orientation] || :vertical
         valid!
         instance_eval(&blk) if block_given?

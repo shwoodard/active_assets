@@ -16,9 +16,22 @@ module ActiveAssets
         @sprites.values
       end
 
-      def sprite(name_or_path, options = {}, &blk)
-        sprites_key = @sprites.has_key?(name_or_path) ? name_or_path : (options[:as] || name_or_path)
-        @sprites[sprites_key].configure(name_or_path, options, &blk)
+      def sprite(*args, &blk)
+        sprite_path, stylesheet_path, options, as =
+        case args.first
+        when Hash
+          options = args.shift
+          args = *options.find {|k,v| k.is_a?(String) }
+          args << options
+        when Symbol
+          # todo make default paths configurable
+          ["sprites/#{args.first.to_s}.png", "sprites/#{args.first.to_s}.css", args.extract_options!, args.first]
+        when String
+          path = args.first
+          [path, "#{File.dirname(path)}/#{File.basename(path, File.extname(path))}.css", args.extract_options!]
+        end
+        options.reverse_merge!(:as => as)
+        @sprites[options[:as] || sprite_path].configure(sprite_path, stylesheet_path, options, &blk)
       end
 
       def [](name)
