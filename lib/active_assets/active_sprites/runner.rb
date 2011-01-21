@@ -74,7 +74,6 @@ module ActiveAssets
             raise
           ensure
             finish
-            @sprite_details = nil
           end
         end
       end
