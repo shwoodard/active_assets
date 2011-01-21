@@ -11,7 +11,8 @@ class RunnerTest < Test::Unit::TestCase
 
   def test_generate!
     assert_false Rails.application.sprites.all.empty?
-    
-    Rails.application.sprites.generate!
+    assert_nothing_raised do
+      Rails.application.sprites.generate!
+    end
   end
 end

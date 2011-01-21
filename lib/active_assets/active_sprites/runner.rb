@@ -34,6 +34,7 @@ module ActiveAssets
 
       def generate!(debug = ENV['DEBUG'])
         @sprites.each do |sprite|
+          next if sprite.sprite_pieces.empty?
           sprite_path = sanitize_asset_path(context.image_path(sprite.path))
           p "Sprite Path: #{sprite_path}" if debug
           sprite_stylesheet_path = sanitize_asset_path(context.stylesheet_path(sprite.stylesheet_path))
