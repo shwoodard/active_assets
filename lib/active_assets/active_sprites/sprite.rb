@@ -24,6 +24,7 @@ module ActiveAssets
       attr_reader :path, :stylesheet_path, :name, :orientation
 
       def initialize
+        # Ordered Hash?
         @sprite_pieces = []
       end
 
