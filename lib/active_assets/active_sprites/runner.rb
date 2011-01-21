@@ -1,3 +1,4 @@
+require 'rack/mount'
 require 'action_view'
 require 'rmagick'
 require 'fileutils'
