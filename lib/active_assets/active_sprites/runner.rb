@@ -34,9 +34,9 @@ module ActiveAssets
 
       def generate!(debug = ENV['DEBUG'])
         @sprites.each do |sprite|
-          sprite_path = strip_asset_path(context.image_path(sprite.path))
+          sprite_path = sanitize_asset_path(context.image_path(sprite.path))
           p "Sprite Path: #{sprite_path}" if debug
-          sprite_stylesheet_path = strip_asset_path(context.stylesheet_path(sprite.stylesheet_path))
+          sprite_stylesheet_path = sanitize_asset_path(context.stylesheet_path(sprite.stylesheet_path))
           p "Sprite Stylesheet Path: #{sprite_stylesheet_path}" if debug
 
           orientation = sprite.orientation.to_s
@@ -44,7 +44,7 @@ module ActiveAssets
 
           begin
             sprite_piece_paths = sprite_pieces.map do |sp|
-              File.join(Rails.application.config.paths.public.to_a.first, strip_asset_path(context.image_path(sp.path)))
+              File.join(Rails.application.config.paths.public.to_a.first, sanitize_asset_path(context.image_path(sp.path)))
             end
             image_list = ImageList.new(*sprite_piece_paths)
 
@@ -91,7 +91,7 @@ module ActiveAssets
           @sprite = DEFAULT_SPRITE
         end
 
-        def strip_asset_path(path)
+        def sanitize_asset_path(path)
           path.split('?').first
         end
 
