@@ -72,7 +72,7 @@ module ActiveAssets
           rescue
             raise
           ensure
-            # finish
+            finish
             @sprite_details = nil
           end
         end
