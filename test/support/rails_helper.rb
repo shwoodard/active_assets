@@ -11,7 +11,12 @@ module RailsHelper
     end
   end
 
-  def initialize_application_or_load_assets!
+  def initialize_application_or_load_sprites!
+    load_sprites! if Rails.application && Rails.application.instance_variable_defined?(:@ran)
+    initialize_application! unless Rails.application && Rails.application.instance_variable_defined?(:@ran)
+  end
+
+  def initialize_application_or_load_expansions!
     load_assets! if Rails.application && Rails.application.instance_variable_defined?(:@ran)
     initialize_application! unless Rails.application && Rails.application.instance_variable_defined?(:@ran)
   end
@@ -24,6 +29,10 @@ module RailsHelper
         load f
       end
     end
+  end
+
+  def load_sprites!
+    load File.join(rails_root, 'config/sprites.rb') if File.exists?(File.join(rails_root, 'config/sprites.rb'))
   end
 
   def initialize_application!

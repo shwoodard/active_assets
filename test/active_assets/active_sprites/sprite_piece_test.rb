@@ -2,7 +2,7 @@ require 'helper'
 
 class SpritePiecetest < Test::Unit::TestCase
   def setup
-    initialize_application_or_load_assets!
+    initialize_application_or_load_sprites!
   end
 
   def teardown
@@ -41,5 +41,25 @@ class SpritePiecetest < Test::Unit::TestCase
     assert_equal "320px", sprites[:sprite2]["sprite_images/sprite1/1.png"].width
     assert_equal "top", sprites[:sprite2]["sprite_images/sprite1/1.png"].y
     assert_equal 'right', sprites[:sprite2]["sprite_images/sprite1/1.png"].x
+  end
+
+  def test_raises_validation_error_when_path_is_blank
+    assert_raises ActiveAssets::ActiveSprites::SpritePiece::ValidationError do
+      Rails.application.sprites do
+        sprite :sprite2 do
+          _"" => ".klass_1"
+        end
+      end
+    end
+  end
+
+  def test_ordered
+    paths = []
+    Dir[Rails.root.join('public/images/sprite_images/sprite4/*.{png,gif,jpg}')].each do |path|
+      image_path = path.match(%r{^.*/public/images/(.*)$})[1]
+      paths << image_path
+    end
+
+    assert_equal paths, Rails.application.sprites['sprites/4.png'].sprite_pieces.map(&:path)
   end
 end

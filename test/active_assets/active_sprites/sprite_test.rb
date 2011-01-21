@@ -2,7 +2,7 @@ require 'helper'
 
 class SpriteTest < Test::Unit::TestCase
   def setup
-    initialize_application_or_load_assets!
+    initialize_application_or_load_sprites!
   end
 
   def teardown

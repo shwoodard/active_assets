@@ -13,6 +13,7 @@ module ActiveAssets
         attr_reader :path, :css_selector
 
         def initialize(path, css_selector)
+          raise ValidationError.new(nil, [:path]) if path.blank?
           @path, @css_selector = path, css_selector
         end
 

@@ -24,27 +24,19 @@ module ActiveAssets
       attr_reader :path, :stylesheet_path, :name, :orientation
 
       def initialize
-        @sprite_pieces = Hash.new do |sprite_pieces, path|
-          raise SpritePiece::ValidationError.new(nil, [:path]) if path.blank?
-          sprite_pieces[path] = SpritePiece.new
-        end
+        @sprite_pieces = []
       end
 
       def has_sprite_piece_with_path?(path)
-        @sprite_pieces.has_key?(path)
+        self[path].present?
       end
 
       def [](path)
-        return nil unless @sprite_pieces.has_key?(path)
-        @sprite_pieces[path]
-      end
-
-      def paths
-        @sprite_pieces.keys
+        @sprite_pieces.find {|sp| sp.path == path}
       end
 
       def sprite_pieces
-        @sprite_pieces.values
+        @sprite_pieces
       end
 
       def configure(sprite_path, stylesheet_path, options = {}, &blk)
@@ -61,7 +53,7 @@ module ActiveAssets
         path, css_selector = SpritePiece::Mapping.find_mapping(options)
         options.delete(path)
         mapping = SpritePiece::Mapping.new(path, css_selector)
-        @sprite_pieces[path].configure(mapping, options, &blk)
+        @sprite_pieces << SpritePiece.new.configure(mapping, options, &blk)
       end
       alias_method :sp, :sprite_piece
       alias_method :_, :sprite_piece
