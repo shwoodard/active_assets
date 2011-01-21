@@ -7,5 +7,7 @@ module ActiveAssets
     autoload :SpritePiece
     autoload :Sprite
     autoload :Sprites
+    autoload :SpriteStylesheet
+    autoload :Runner
   end
 end

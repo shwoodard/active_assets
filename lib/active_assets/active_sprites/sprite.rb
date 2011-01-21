@@ -1,6 +1,10 @@
 module ActiveAssets
   module ActiveSprites
     class Sprite
+      module Orientation
+        VERTICAL = 'vertical'
+        HORIZONTAL = 'horizontal'
+      end
       REQUIRED_PROPS = [:path, :stylesheet_path, :orientation]
 
       class ValidationError < StandardError
@@ -37,6 +41,10 @@ module ActiveAssets
 
       def paths
         @sprite_pieces.keys
+      end
+
+      def sprite_pieces
+        @sprite_pieces.values
       end
 
       def configure(sprite_path, stylesheet_path, options = {}, &blk)

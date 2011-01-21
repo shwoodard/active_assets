@@ -42,6 +42,10 @@ module ActiveAssets
       def clear
         @sprites.clear
       end
+
+      def generate!
+        Runner.new(@sprites).generate!
+      end
     end
   end
 end

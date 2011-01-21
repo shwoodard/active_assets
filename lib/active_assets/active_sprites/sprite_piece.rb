@@ -23,16 +23,27 @@ module ActiveAssets
 
       GEOMETRY_PROPS = [:x, :y, :width, :height]
       attr_reader(*GEOMETRY_PROPS)
+      attr_accessor :details
       delegate :path, :css_selector, :to => :mapping
-
-      def initialize
-      end
 
       def configure(mapping, options = {}, &blk)
         @mapping = mapping
         options.each {|k,v| send(k, v)}
         instance_eval(&blk) if block_given?
         self
+      end
+
+      def to_s
+        return '' if details.nil?
+        <<-CSS
+#{css_selector}
+{
+  width:#{width || details.width};
+  height:#{height || details.height};
+  background:url('#{details.sprite_path}') no-repeat #{x || details.x} #{y || details.y};
+  display:block;
+}
+        CSS
       end
 
       GEOMETRY_PROPS.each do |prop|
