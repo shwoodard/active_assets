@@ -1,4 +1,5 @@
 require 'helper'
+require 'fileutils'
 
 class RunnerTest < Test::Unit::TestCase
 
@@ -19,6 +20,17 @@ class RunnerTest < Test::Unit::TestCase
     tear_down_assets
   end
 
+
+  def test_generate
+    visit "/sprite?sprite_path=/images/#{Rails.application.sprites['sprites/4.png'].path}"
+    assert_equal 2400, page.find('#sprite').native.height
+  end
+
+  def test_generate_2
+    visit "/sprite?sprite_path=/images/#{Rails.application.sprites['sprites/3.png'].path}"
+    assert_equal 96, page.find('#sprite').native.height
+  end
+  
   def test_sprite_exists
     assert File.exists?(Rails.root.join('public/images/sprites/3.png'))
     assert File.exists?(Rails.root.join('public/images/sprites/4.png'))

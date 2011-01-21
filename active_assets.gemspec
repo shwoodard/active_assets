@@ -18,7 +18,10 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'rmagick'
 
+  s.add_development_dependency "sinatra"
+  s.add_development_dependency "thin"
   s.add_development_dependency "rails", "3.0.3"
   s.add_development_dependency "test-unit", "> 2.0"
+  s.add_development_dependency "capybara", "0.4.1.rc"
   s.add_development_dependency "ZenTest"
 end

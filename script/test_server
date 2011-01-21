@@ -1,0 +1,1 @@
+java -Xms32m -Xmx1024m -cp vendor/jruby-complete-1.5.6.jar com.martiansoftware.nailgun.NGServer
