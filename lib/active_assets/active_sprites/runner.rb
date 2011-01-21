@@ -70,8 +70,6 @@ module ActiveAssets
             stylesheet = SpriteStylesheet.new(sprite_path, sprite_pieces)
             stylesheet.write File.join(Rails.application.config.paths.public.to_a.first, sprite_stylesheet_path)
             write File.join(Rails.application.config.paths.public.to_a.first, sprite_path)
-          rescue
-            raise
           ensure
             finish
           end
