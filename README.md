@@ -20,7 +20,7 @@ In your rails app
     ...
 
 ## The dsls
-### Active Expansions
+### Introduction to Active Expansions
 
 Active expansions allow you to register Rails javascript and stylesheet expansions via a simple dsl.  Addionally, the assets in the expansion are concatenated when appropriate and the expansion delivers the concatenated (or 'cached') assets' path in the appropriate environments.  Also, files can be specified as deploy only or only for a specific environment.  For example, you may wish to include jQuery or Prototype src files in development and use minified libraries from cdn sources in production.  This is supported.
 
