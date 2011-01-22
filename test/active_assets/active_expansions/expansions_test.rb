@@ -7,7 +7,7 @@ class ExpansionsTest < Test::Unit::TestCase
 
   def teardown
     delete_cached_assets!
-    Rails.application.expansions.clear
+    tear_down_assets
   end
 
   def test_new

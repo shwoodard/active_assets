@@ -3,7 +3,6 @@ require 'helper'
 class RunnerTest < Test::Unit::TestCase
 
   def setup
-    Rails.application.sprites.clear
     initialize_application_or_load_sprites!
 
     assert_false Rails.application.sprites.all.empty?
@@ -17,7 +16,7 @@ class RunnerTest < Test::Unit::TestCase
     FileUtils.rm_rf(Rails.root.join('public/images/sprites'))
     FileUtils.rm_rf(Rails.root.join('public/stylesheets/sprites'))
 
-    Rails.application.sprites.clear
+    tear_down_assets
   end
 
   def test_sprite_exists

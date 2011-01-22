@@ -16,4 +16,9 @@ class Test::Unit::TestCase
   def sprites
     Rails.application.sprites
   end
+
+  def tear_down_assets
+    Rails.application.sprites.clear
+    Rails.application.expansions.clear
+  end
 end
