@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.email       = ["sam@wildfireapp.com"]
   s.homepage    = ""
   s.summary     = %q{A Railtie that provides a full asset management system, including support for development and deployment.}
-  s.description = %q{A Railtie that provides a full asset management system, including support for development and deployment.  Currently it is designed to manage javascripts and stylesheets but will handle image sprites in the future.}
+  s.description = %q{A Railtie that provides a full asset management system, including support for development and deployment.  This includes building sprites, concatenating javascript and css via expansion definitions.}
 
   s.rubyforge_project = "rails-assets"
 
