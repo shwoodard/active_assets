@@ -1,4 +1,5 @@
 require 'helper'
+require 'securerandom'
 
 class AssetTest < Test::Unit::TestCase
   def setup
@@ -35,6 +36,22 @@ class AssetTest < Test::Unit::TestCase
 
   def test_valid_bang
     asset = ActiveAssets::ActiveExpansions::Asset.new(nil, :js, :defaults, [:development, :test], "not false")
-    assert_raise ActiveAssets::ActiveExpansions::Asset::ValidationError do asset.valid!; end
+    assert_raise(ActiveAssets::ActiveExpansions::Asset::ValidationError) { asset.valid! }
+  end
+
+  def test_invalid_type
+    asset = ActiveAssets::ActiveExpansions::Asset.new('/path/to/asset', :pdf, :defaults, [:development, :test], false)
+    assert_raises(ActiveAssets::ActiveExpansions::Asset::InvalidAssetType) { asset.valid! }
+  end
+
+  ActiveAssets::ActiveExpansions::Asset.members.each do |member|
+    eval <<-EOS
+      def test_#{member}_equals
+        val = SecureRandom.hex
+        asset = ActiveAssets::ActiveExpansions::Asset.new('/path/to/asset', :js, :defaults, [:development, :test], false)
+        asset.#{member}= val
+        assert_equal val, asset.#{member}
+      end
+    EOS
   end
 end
