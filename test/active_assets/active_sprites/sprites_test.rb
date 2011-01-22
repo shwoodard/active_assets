@@ -20,7 +20,7 @@ class SpritesTest < Test::Unit::TestCase
   def test_sprite
     assert_nothing_raised do
        Rails.application.sprites do
-         sprite :foo, :orientation => :vertical
+         sprite :foo
        end
      end
   end
