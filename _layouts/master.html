@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Active Assets - {{ page.title }}</title>
+    <link rel="stylesheet" href="/stylesheets/master.css" type="text/css" media="screen" charset="utf-8"/>
+    <script src="/javascripts/jquery.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+  <body>
+    <div id='wrapper'>
+      <div id='header'>
+        <h1><a href='/'>Active Assets</a></h1>
+        <div id='menu'>
+          <ul>
+            <li><a id="about_link" title="About" href="/screencast.html">Screencast</a></li>
+            <li><a id="" title="Tech Spec" href="/techspec.html">Technical Specifications</a></li>
+            <li><a href='http://github.com/shwoodard/active_assets' target='_blank' title='GitHub' id='github_link'>GitHub</a></li>
+            <li><a href='http://twitter.com/active_assets' title='Twitter' target='_blank' rel='me' id='twitter_link'>Twitter</a></li>
+          </ul>
+        </div>
+      </div>
+      <div id='content'>
+        {{ content }}
+      </div>
+    </div>
+    <div id='footer'>
+      Copyright &copy; 2011 Sam Woodard. Some rights reserved.
+    </div>
+  </body>
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-20910068-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+</html>
