@@ -25,19 +25,23 @@ module ActiveAssets
 
       def initialize
         # Ordered Hash?
-        @sprite_pieces = []
+        @sprite_pieces = ActiveSupport::OrderedHash.new do |sprite_pieces, path|
+          raise SpritePiece::ValidationError.new(nil, [:path]) if path.blank?
+          sprite_pieces[path] = SpritePiece.new
+        end
       end
 
       def has_sprite_piece_with_path?(path)
-        self[path].present?
+        @sprite_pieces.has_key?(path)
       end
 
       def [](path)
-        @sprite_pieces.find {|sp| sp.path == path}
+        return nil unless @sprite_pieces.has_key?(path)
+        @sprite_pieces[path]
       end
 
       def sprite_pieces
-        @sprite_pieces
+        @sprite_pieces.values
       end
 
       def configure(sprite_path, stylesheet_path, options = {}, &blk)
@@ -54,7 +58,7 @@ module ActiveAssets
         path, css_selector = SpritePiece::Mapping.find_mapping(options)
         options.delete(path)
         mapping = SpritePiece::Mapping.new(path, css_selector)
-        @sprite_pieces << SpritePiece.new.configure(mapping, options, &blk)
+        @sprite_pieces[path].configure(mapping, options, &blk)
       end
       alias_method :sp, :sprite_piece
       alias_method :_, :sprite_piece
