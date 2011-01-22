@@ -8,7 +8,7 @@ A Railtie that provides a full asset management system, including support for de
 Gemfile
 -------
 
-  gem 'active_assets'
+    gem 'active_assets'
   
 In your rails app
 -----------------
