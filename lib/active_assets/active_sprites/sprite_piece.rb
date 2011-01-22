@@ -16,10 +16,6 @@ module ActiveAssets
           raise ValidationError.new(nil, [:path]) if path.blank?
           @path, @css_selector = path, css_selector
         end
-
-        def self.find_mapping(options)
-          options.find {|k, v| k.is_a?(String) }
-        end
       end
 
       GEOMETRY_PROPS = [:x, :y, :width, :height]

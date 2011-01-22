@@ -55,7 +55,7 @@ module ActiveAssets
       end
 
       def sprite_piece(options, &blk)
-        path, css_selector = SpritePiece::Mapping.find_mapping(options)
+        path, css_selector = options.find {|k, v| k.is_a?(String)}
         options.delete(path)
         mapping = SpritePiece::Mapping.new(path, css_selector)
         @sprite_pieces[path].configure(mapping, options, &blk)
