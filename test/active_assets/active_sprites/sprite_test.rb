@@ -2,6 +2,7 @@ require 'helper'
 
 class SpriteTest < Test::Unit::TestCase
   def setup
+    Rails.application.sprites.clear
     initialize_application_or_load_sprites!
   end
 
