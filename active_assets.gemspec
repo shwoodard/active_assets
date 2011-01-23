@@ -1,13 +1,13 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |s|
   s.name        = "active_assets"
-  s.version     = '0.2.0.pre'
+  s.version     = '0.2.0.rc'
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Sam Woodard"]
   s.email       = ["sam@wildfireapp.com"]
-  s.homepage    = ""
+  s.homepage    = "http://github.com/shwoodard/active_assets"
   s.summary     = %q{A Railtie that provides a full asset management system, including support for development and deployment.}
-  s.description = %q{A Railtie that provides a full asset management system, including support for development and deployment.  This includes building sprites, concatenating javascript and css via expansion definitions.}
+  s.description = %q{A Railtie that provides a full asset management system, including support for development and deployment.  It is comprised of two libraries, ActiveSprites and ActiveExpansions.  ActiveSprites generates sprites and their corresponding stylesheet from dsl definition. ActiveExpansions manages javascript and css, including concatenation support for deployment, using Rails expansions plus a dsl.}
 
   s.rubyforge_project = "rails-assets"
 
@@ -18,10 +18,10 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'rmagick'
 
-  s.add_development_dependency "sinatra"
-  s.add_development_dependency "thin"
-  s.add_development_dependency "rails", "3.0.3"
+  s.add_development_dependency "sinatra", "~>1.1.2"
+  s.add_development_dependency "thin", "~>1.2.7"
+  s.add_development_dependency "rails", "~>3.0.3"
   s.add_development_dependency "test-unit", "> 2.0"
-  s.add_development_dependency "capybara", "0.4.1.rc"
-  s.add_development_dependency "ZenTest"
+  s.add_development_dependency "capybara", "~>0.4.1.1"
+  s.add_development_dependency "ZenTest", "~>4.4.2"
 end
