@@ -4,6 +4,7 @@ pkg/*
 *.gem
 .bundle
 Gemfile.lock
+doc
 
 test/fixtures/rails_root/log
 test/fixtures/rails_root/public/stylesheets/cache
