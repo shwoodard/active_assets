@@ -43,7 +43,7 @@ module ActiveAssets
         end
       end
       alias_method :a, :asset
-      alias_method :`, :asset
+      alias_method :_, :asset
 
       def expansion(name, options = {}, &blk)
         options = update_expansion_options(options)

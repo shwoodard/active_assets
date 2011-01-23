@@ -19,8 +19,8 @@ class ExpansionsTest < Test::Unit::TestCase
   def test_namespace
     Rails.application.expansions.namespace :fubar do
       expansion :foo, :type => :js do
-        `bas/bar`
-        `bar/bas`
+       _'bas/bar'
+       _'bar/bas'
       end
     end
 
@@ -31,8 +31,8 @@ class ExpansionsTest < Test::Unit::TestCase
     Rails.application.expansions do
       namespace :fubar do
         expansion :foo, :type => :js do
-          `bas/bar`
-          `bar/bas`
+         _'bas/bar'
+         _'bar/bas'
         end
       end
     end
@@ -43,8 +43,8 @@ class ExpansionsTest < Test::Unit::TestCase
   def test_namespace_3
     Rails.application.expansions do
       expansion :foo, :type => :js, :namespace => :fubar do
-        `bas/bar`
-        `bar/bas`
+       _'bas/bar'
+       _'bar/bas'
       end
     end
 
@@ -62,7 +62,7 @@ class ExpansionsTest < Test::Unit::TestCase
   def test_asset_2
     Rails.application.expansions do
       expansion :foo do
-        `bas/bar.js`
+       _'bas/bar.js'
       end
     end
   
@@ -129,7 +129,7 @@ class ExpansionsTest < Test::Unit::TestCase
     assert_raise ActiveAssets::ActiveExpansions::Asset::InvalidAssetType do
       Rails.application.expansions do
         expansion :foo do
-          `bas/bar.pdf`
+         _'bas/bar.pdf'
         end
       end
     end
@@ -139,7 +139,7 @@ class ExpansionsTest < Test::Unit::TestCase
     assert_raise ActiveAssets::ActiveExpansions::Asset::AmbiguousContext do
       Rails.application.expansions do
         expansion :foo do
-          `vendor/jquery.mousewheel`
+         _'vendor/jquery.mousewheel'
         end
       end
     end
@@ -148,11 +148,11 @@ class ExpansionsTest < Test::Unit::TestCase
   def test_expansion_1
     Rails.application.expansions do
       expansion :foo do
-        `vendor/jquery.mousewheel.js`
+       _'vendor/jquery.mousewheel.js'
       end
 
       expansion :foo do
-        `bar/bas.js`
+       _'bar/bas.js'
       end
     end
 

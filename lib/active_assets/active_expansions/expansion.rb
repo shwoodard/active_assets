@@ -42,7 +42,7 @@ module ActiveAssets
         @assets << a
       end
       alias_method :a, :asset
-      alias_method :`, :asset
+      alias_method :_, :asset
 
       def group(*groups, &blk)
         @current_groups = groups

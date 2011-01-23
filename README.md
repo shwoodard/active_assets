@@ -32,45 +32,45 @@ ActiveExpansions allow you to register Rails javascript and stylesheet expansion
 
     Rails.application.expansions.register do
       expansion :global, :type => :js do
-        `vendor/jquery`
-        `application`
+        _'vendor/jquery'
+        _'application'
       end
 
       expansion :global, :type => :css do
-        `vendor/reset`
-        `application`
+        _'vendor/reset'
+        _'application'
       end
 
       expansion :global do
-        `vendor/jquery.js`
-        `application.js`
-        `vendor/reset.css`
-        `application.css`
+        _'vendor/jquery.js'
+        _'application.js'
+        _'vendor/reset.css'
+        _'application.css'
       end
 
       js do
         expansion :global do
-          `vendor/jquery`
-          `application`
+          _'vendor/jquery'
+          _'application'
         end
       end
 
       css do
         expansion :global do
-          `vendor/reset`
-          `application`
+          _'vendor/reset'
+          _'application'
         end
       end
 
       expansion :global do
         js do
-          `vendor/jquery`
-          `application`
+          _'vendor/jquery'
+          _'application'
         end
 
         css do
-          `vendor/reset`
-          `application`
+          _'vendor/reset'
+          _'application'
         end
       end
     end
@@ -78,16 +78,16 @@ ActiveExpansions allow you to register Rails javascript and stylesheet expansion
 #### config/assets/js.rb (suggestion only)
     Rails.application.expansions.js do
       expansion :global do
-        `vendor/jquery`
-        `application`
+        _'vendor/jquery'
+        _'application'
       end
     end
 
 #### config/assets/css.rb (suggestion only)
     Rails.application.expansions.css do
       expansion :global do
-        `vendor/reset`
-        `application`
+        _'vendor/reset'
+        _'application'
       end
     end
 
@@ -119,18 +119,18 @@ You can specify certain assets only be used in a deployment setting or only be u
         js do
           asset 'vendor/jquery', :group => [:development, :test]
           asset 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js', :group => :deploy, :cache => false
-          `application`
+          _'application'
         end
 
         css do
           asset 'vendor/reset', :group => [:development, :test]
           asset 'http://ajax.googleapis.com/ajax/libs/yui/2.8.1/build/reset-fonts/reset-fonts.css', :group => :deploy, :cache => false
-          `application`
+          _'application'
         end
       end
     end
 
-back-tick and `a` are aliases for `asset`
+`_` and `a` are aliases for `asset`
 
 #### ActiveExpansions configuration and deployment
 By default, ActiveExpansions will not cache your assets even if `ActionController.perform_caching` is enabled.  This is because if you are not serving assets from the same server as where your application resides, then you most likely want to cache your assets at deploy time (on the front-end servers).  To cache assets manually,
@@ -160,7 +160,6 @@ It is possible to add all of the world flags!  Haha, see the following example,
         end
       end
     end
-
 `_` and `sp` are aliases for `sprite_piece`
 
 Also, you will notice that I gave a symbol for the sprite instead of a mapping.  This will assume that you wish to store your sprite at `path/to/your/public/images/sprites/world_flags.png` and you wish to store your stylesheet at `path/to/your/public/stylesheets/sprites/world_flags.css`.
