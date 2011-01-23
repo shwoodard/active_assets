@@ -46,7 +46,7 @@ end
 if is_port_open?('127.0.0.1', '2113')
   Culerity.jruby_invocation = "#{File.expand_path('../../vendor/bin/ng', __FILE__)} org.jruby.Main"
 else
-  Culerity.jruby_invocation = "java -jar #{File.expand_path('../../vendor/jruby-complete-1.5.6.jar', __FILE__)}"
+  Culerity.jruby_invocation = "java -Xms32m -Xmx1024m -jar #{File.expand_path('../../vendor/jruby-complete-1.5.6.jar', __FILE__)}"
 end
 
 
