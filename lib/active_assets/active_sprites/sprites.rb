@@ -44,7 +44,11 @@ module ActiveAssets
       end
 
       def generate!
-        Runner.new(@sprites).generate!
+        begin
+          require 'rmagick'
+          Runner.new(@sprites).generate!
+        rescue LoadError
+        end
       end
     end
   end

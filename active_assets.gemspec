@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |s|
   s.name        = "active_assets"
-  s.version     = '0.2.0.rc3'
+  s.version     = '0.2.0.rc4'
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Sam Woodard"]
   s.email       = ["sam@wildfireapp.com"]
@@ -16,8 +16,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_runtime_dependency 'rmagick'
-
+  s.add_development_dependency 'rmagick'
   s.add_development_dependency "sinatra", "~>1.1.2"
   s.add_development_dependency "thin", "~>1.2.7"
   s.add_development_dependency "rails", "~>3.0.3"
