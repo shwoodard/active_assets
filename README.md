@@ -93,7 +93,7 @@ ActiveExpansions allow you to register Rails javascript and stylesheet expansion
 
 ### Introduction to Active Sprites
 
-ActiveSprites allows you to generate sprites within your Rails apps with `rake sprites`!  All you need is rmagick (in development) and you are on your way.  Store the images that make up your sprites in your rails project, use the dsl below to tell ActiveSprites which images to include in your sprites, the css selector the corresponds to each image in the sprite, the location to write the sprite, and the location to write the stylesheet.
+ActiveSprites allows you to generate sprites within your Rails apps with `rake sprites`!  All you need is rmagick and you are on your way. If you don't have rmagick installed, ActiveSprites will just fail silently when you try to generate the sprites. Store the images that make up your sprites in your rails project, use the dsl below to tell ActiveSprites which images to include in your sprites, the css selector the corresponds to each image in the sprite, the location to write the sprite, and the location to write the stylesheet.
 
 #### config/sprites.rb
     Rails.application.sprites do
