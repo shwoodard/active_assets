@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{A Railtie that provides a full asset management system, including support for development and deployment.}
   s.description = %q{A Railtie that provides a full asset management system, including support for development and deployment.  It is comprised of two libraries, ActiveSprites and ActiveExpansions.  ActiveSprites generates sprites and their corresponding stylesheet from dsl definition. ActiveExpansions manages javascript and css, including concatenation support for deployment, using Rails expansions plus a dsl.}
 
-  s.rubyforge_project = "rails-assets"
+  s.rubyforge_project = "activeassets"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
