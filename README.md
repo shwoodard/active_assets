@@ -3,7 +3,7 @@ Active Assets
 
 A Railtie that provides a full asset management system, including support for development and deployment.  This includes building sprites, concatenating javascript and css via expansion definitions.  Active Assets includes two libraries, Active Expansions and Active Sprites.
 
-    gem install active_assets
+    gem install active_assets --pre
 
 Gemfile
 -------
