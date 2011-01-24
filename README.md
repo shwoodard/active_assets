@@ -99,7 +99,7 @@ ActiveSprites allows you to generate sprites within your Rails apps with `rake s
     Rails.application.sprites do
       sprite 'sprites/world_flags.png' => 'sprites/world_flags.css'
         _"sprite_images/world_flags/Argentina.gif" => ".flags.argentina"
-        _"sprites_images/world_flags/Australia.gif" => ".flags.australia"
+        _"sprite_images/world_flags/Australia.gif" => ".flags.australia"
         ...
       end
     end
