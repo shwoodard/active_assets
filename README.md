@@ -163,5 +163,3 @@ It is possible to add all of the world flags!  Haha, see the following example,
 `_` and `sp` are aliases for `sprite_piece`
 
 Also, you will notice that I gave a symbol for the sprite instead of a mapping.  This will assume that you wish to store your sprite at `path/to/your/public/images/sprites/world_flags.png` and you wish to store your stylesheet at `path/to/your/public/stylesheets/sprites/world_flags.css`.
-
-Copyright © Sam Woodard 2011.  Release under the MIT License.
