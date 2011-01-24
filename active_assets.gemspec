@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |s|
   s.name        = "active_assets"
-  s.version     = '0.2.0.rc4'
+  s.version     = '0.2.0'
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Sam Woodard"]
   s.email       = ["sam@wildfireapp.com"]
@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "activeassets"
 
-  s.files         = Dir["lib/**/*", "README.md"]
+  s.files         = Dir["lib/**/*", "README.md", "MIT-LICENSE", "Rakefile", "Gemfile", "script/**/*", "config.ru"]
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
