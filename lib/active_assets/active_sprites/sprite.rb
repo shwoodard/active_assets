@@ -21,7 +21,7 @@ module ActiveAssets
         end
       end
 
-      attr_reader :path, :stylesheet_path, :name, :orientation
+      attr_reader :path, :stylesheet_path, :name, :orientation, :quality, :matte_color
 
       def initialize
         # Ordered Hash?
@@ -48,7 +48,8 @@ module ActiveAssets
         @path ||= sprite_path
         @name = options.delete(:as) || sprite_path
         @stylesheet_path = stylesheet_path
-        @orientation = options[:orientation] || :vertical
+        @orientation = options.delete(:orientation) || :vertical
+        options.each {|k,v| send("#{k}=",v)}
         valid!
         instance_eval(&blk) if block_given?
         self
@@ -81,8 +82,12 @@ module ActiveAssets
 
       private
 
-        def orientation=(orientation)
-          @orientation = orientation
+        def matte_color=(val)
+          @matte_color = val
+        end
+
+        def quality=(val)
+          @quality = val
         end
     end
   end

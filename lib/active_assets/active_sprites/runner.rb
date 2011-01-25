@@ -66,11 +66,14 @@ module ActiveAssets
               self.tile = orientation == Sprite::Orientation::VERTICAL ? "1x#{sprite_pieces.size}" : "#{sprite_pieces.size}x1"
               self.geometry = "+0+0"
               self.background_color = 'transparent'
+              self.matte_color = sprite.matte_color || '#bdbdbd'
             end
+
+            @sprite.strip!
 
             stylesheet = SpriteStylesheet.new(sprite_path, sprite_pieces)
             stylesheet.write File.join(Rails.application.config.paths.public.to_a.first, sprite_stylesheet_path)
-            write File.join(Rails.application.config.paths.public.to_a.first, sprite_path)
+            write File.join(Rails.application.config.paths.public.to_a.first, sprite_path), sprite.quality
           ensure
             finish
           end
@@ -82,9 +85,11 @@ module ActiveAssets
           @context
         end
 
-        def write(path)
+        def write(path, quality = nil)
           FileUtils.mkdir_p(File.dirname(path))
-          @sprite.write("png:#{path}")
+          @sprite.write("#{File.extname(path)[1..-1]}:#{path}") do
+            self.quality = quality || 75
+          end
         end
 
         def finish

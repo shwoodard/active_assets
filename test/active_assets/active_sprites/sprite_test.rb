@@ -50,4 +50,20 @@ class SpriteTest < Test::Unit::TestCase
       end
     end
   end
+
+  def test_quality
+    Rails.application.sprites do
+      sprite :bas, :quality => 50
+    end
+
+    assert_equal 50, Rails.application.sprites[:bas].quality
+  end
+
+  def test_matte_color
+    Rails.application.sprites do
+      sprite :foobas, :matte_color => '#FFFFFF'
+    end
+
+    assert_equal '#FFFFFF', Rails.application.sprites[:foobas].matte_color
+  end
 end
