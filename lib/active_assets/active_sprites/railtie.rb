@@ -1,4 +1,5 @@
 require 'rails'
+require 'rails/railtie'
 require 'rails/active_sprites'
 require 'active_assets/active_sprites'
 

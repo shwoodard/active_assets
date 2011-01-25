@@ -43,10 +43,10 @@ module ActiveAssets
         @sprites.clear
       end
 
-      def generate!
+      def generate!(railtie = Rails.application)
         begin
           require 'rmagick'
-          Runner.new(@sprites).generate!
+          Runner.new(@sprites).generate!(railtie)
         rescue LoadError
         end
       end

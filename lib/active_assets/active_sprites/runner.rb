@@ -1,3 +1,5 @@
+require 'action_controller'
+require 'action_view'
 require 'rack/mount'
 require 'action_view'
 require 'rmagick'
@@ -15,9 +17,6 @@ module ActiveAssets
       DEFAULT_SPRITE = Image.new(0,0).freeze
 
       def initialize(sprites)
-        @controller = ActionController::Base.new
-        @context = AssetContext.new(Rails.application.config.action_controller, {}, @controller)
-
         @sprites = if ENV['SPRITE']
           sprites.select do |name, sprite|
             ENV['SPRITE'].split(',').map(&:compact).each do |sp|
@@ -32,7 +31,26 @@ module ActiveAssets
         end
       end
 
-      def generate!(debug = ENV['DEBUG'])
+      def generate!(railtie = Rails.application, debug = ENV['DEBUG'])
+        p "Engine Class Name:  #{railtie.class.name}" if debug
+
+        unless railtie.config.respond_to?(:action_controller)
+          railtie.config.action_controller = ActiveSupport::OrderedOptions.new
+
+          paths   = railtie.config.paths
+          options = railtie.config.action_controller
+
+          options.assets_dir           ||= paths.public.to_a.first
+          options.javascripts_dir      ||= paths.public.javascripts.to_a.first
+          options.stylesheets_dir      ||= paths.public.stylesheets.to_a.first
+
+          ActiveSupport.on_load(:action_controller) do
+            options.each { |k,v| send("#{k}=", v) }
+          end
+        end
+
+        controller = ActionController::Base.new
+        context = AssetContext.new(railtie.config.action_controller, {}, controller)
         @sprites.each do |sprite|
           next if sprite.sprite_pieces.empty?
           sprite_path = sanitize_asset_path(context.image_path(sprite.path))
@@ -45,7 +63,7 @@ module ActiveAssets
 
           begin
             sprite_piece_paths = sprite_pieces.map do |sp|
-              File.join(Rails.application.config.paths.public.to_a.first, sanitize_asset_path(context.image_path(sp.path)))
+              File.join(railtie.config.paths.public.to_a.first, sanitize_asset_path(context.image_path(sp.path)))
             end
             image_list = ImageList.new(*sprite_piece_paths)
 
@@ -72,8 +90,8 @@ module ActiveAssets
             @sprite.strip!
 
             stylesheet = SpriteStylesheet.new(sprite_path, sprite_pieces)
-            stylesheet.write File.join(Rails.application.config.paths.public.to_a.first, sprite_stylesheet_path)
-            write File.join(Rails.application.config.paths.public.to_a.first, sprite_path), sprite.quality
+            stylesheet.write File.join(railtie.config.paths.public.to_a.first, sprite_stylesheet_path)
+            write File.join(railtie.config.paths.public.to_a.first, sprite_path), sprite.quality
           ensure
             finish
           end
@@ -81,10 +99,6 @@ module ActiveAssets
       end
 
       private
-        def context
-          @context
-        end
-
         def write(path, quality = nil)
           FileUtils.mkdir_p(File.dirname(path))
           @sprite.write("#{File.extname(path)[1..-1]}:#{path}") do
