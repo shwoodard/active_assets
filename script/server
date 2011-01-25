@@ -1,1 +1,0 @@
-rackup -I./test/fixtures/sinatra_root -p 3000 -s thin
