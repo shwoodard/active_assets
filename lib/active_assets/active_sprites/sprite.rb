@@ -21,7 +21,7 @@ module ActiveAssets
         end
       end
 
-      attr_reader :path, :stylesheet_path, :name, :orientation, :quality, :matte_color
+      attr_reader :path, :stylesheet_path, :name, :orientation, :quality, :matte_color, :url
 
       def initialize
         # Ordered Hash?
@@ -88,6 +88,12 @@ module ActiveAssets
 
         def quality=(val)
           @quality = val
+        end
+
+        # The url to be used in the background attributes on the stylesheet
+        # it can be overriden but its the path to ths sprite, but default.
+        def url=(val)
+          @url = val
         end
     end
   end

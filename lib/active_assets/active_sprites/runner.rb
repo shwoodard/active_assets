@@ -53,7 +53,7 @@ module ActiveAssets
 
             image_list.each_with_index do |image, i|
               sprite_pieces[i].details = SpriteDetails.new(
-                sprite_path,
+                sprite.url.present? ? sprite.url : sprite_path,
                 orientation == Sprite::Orientation::VERTICAL ? 0 : "#{-offset}px",
                 orientation == Sprite::Orientation::VERTICAL ? "#{-offset}px" : 0,
                 "#{image.columns}px",

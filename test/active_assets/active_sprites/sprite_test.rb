@@ -1,4 +1,5 @@
 require 'helper'
+require 'css_parser'
 
 class SpriteTest < Test::Unit::TestCase
   def setup
@@ -65,5 +66,28 @@ class SpriteTest < Test::Unit::TestCase
     end
 
     assert_equal '#FFFFFF', Rails.application.sprites[:foobas].matte_color
+  end
+
+  def test_url
+    Rails.application.sprites do
+      sprite :foobar, :url => "activecodebase.com" do
+        _"sprite_images/sprite3/1.gif" => ".klass_1"
+        _"sprite_images/sprite3/2.gif" => ".klass_2"
+      end
+    end
+
+    Rails.application.sprites.generate!
+
+    sprite =  Rails.application.sprites[:foobar]
+    parser = CssParser::Parser.new
+    parser.load_file!(File.basename(sprite.stylesheet_path), File.dirname(Rails.root.join('public/stylesheets', sprite.stylesheet_path)), :screen)
+
+    uses_url = true
+
+    parser.each_selector do |selector, declarations, specificity|
+      uses_url &= declarations[%r{url\('(.+)'\)},1] == "activecodebase.com"
+    end
+
+    assert uses_url
   end
 end
