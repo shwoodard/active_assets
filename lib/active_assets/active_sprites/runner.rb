@@ -34,23 +34,8 @@ module ActiveAssets
       def generate!(railtie = Rails.application, debug = ENV['DEBUG'])
         p "Engine Class Name:  #{railtie.class.name}" if debug
 
-        unless railtie.config.respond_to?(:action_controller)
-          railtie.config.action_controller = ActiveSupport::OrderedOptions.new
+        context = setup_context(railtie)
 
-          paths   = railtie.config.paths
-          options = railtie.config.action_controller
-
-          options.assets_dir           ||= paths.public.to_a.first
-          options.javascripts_dir      ||= paths.public.javascripts.to_a.first
-          options.stylesheets_dir      ||= paths.public.stylesheets.to_a.first
-
-          ActiveSupport.on_load(:action_controller) do
-            options.each { |k,v| send("#{k}=", v) }
-          end
-        end
-
-        controller = ActionController::Base.new
-        context = AssetContext.new(railtie.config.action_controller, {}, controller)
         @sprites.each do |sprite|
           next if sprite.sprite_pieces.empty?
           sprite_path = sanitize_asset_path(context.image_path(sprite.path))
@@ -113,6 +98,26 @@ module ActiveAssets
 
         def sanitize_asset_path(path)
           path.split('?').first
+        end
+
+        def setup_context(railtie)
+          unless railtie.config.respond_to?(:action_controller)
+            railtie.config.action_controller = ActiveSupport::OrderedOptions.new
+
+            paths   = railtie.config.paths
+            options = railtie.config.action_controller
+
+            options.assets_dir           ||= paths.public.to_a.first
+            options.javascripts_dir      ||= paths.public.javascripts.to_a.first
+            options.stylesheets_dir      ||= paths.public.stylesheets.to_a.first
+
+            ActiveSupport.on_load(:action_controller) do
+              options.each { |k,v| send("#{k}=", v) }
+            end
+          end
+
+          controller = ActionController::Base.new
+          AssetContext.new(railtie.config.action_controller, {}, controller)
         end
 
     end
