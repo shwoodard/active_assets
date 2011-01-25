@@ -2,9 +2,6 @@ ENV['RAILS_ENV'] ||= 'test'
 
 require 'rubygems'
 require 'test/unit'
-require 'capybara'
-require 'capybara/dsl'
-require 'culerity'
 
 require 'rails/all'
 require 'active_assets'
