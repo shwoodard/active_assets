@@ -1,6 +1,7 @@
 require 'helper'
 require 'fileutils'
 require 'rmagick'
+require 'css_parser'
 
 class RunnerTest < Test::Unit::TestCase
   include Magick
@@ -21,23 +22,39 @@ class RunnerTest < Test::Unit::TestCase
     tear_down_assets
   end
 
+  Selector = Struct.new(:selector, :x, :y, :width, :height)
 
   def test_generate
     sprite = Rails.application.sprites['sprites/4.png']
     orientation = sprite.orientation
     sprite_pieces = sprite.sprite_pieces
-    sprite_image = Image.read(Rails.root.join('public/images/sprites/4.png')).first
-    # TODO parse stylesheet
-    offset = 0
-    sprite_pieces.each do |sp|
+    sprite_image = Image.read(Rails.root.join('public/images', sprite.path)).first
+
+    stylesheet_path = Rails.root.join('public/stylesheets', sprite.stylesheet_path)
+    parser = CssParser::Parser.new
+    parser.load_file!(File.basename(stylesheet_path), File.dirname(stylesheet_path), :screen)
+
+    sprite_pieces_with_selector_data = []
+
+    parser.each_selector do |selectors, declarations, specificity|
+      sprite_piece = sprite_pieces.find {|sp| sp.css_selector == selectors }
+      width = declarations[%r{width:\s*(\d+)px}, 1].to_i
+      height = declarations[%r{height:\s*(\d+)px}, 1].to_i
+      background = declarations[%r{background:\s*([^;]+)}, 1]
+      x = background[%r{\s-?(\d+)(?:px)?\s}, 1].to_i
+      y = background[%r{\s-?(\d+)(?:px)?$}, 1].to_i
+      sprite_pieces_with_selector_data << [sprite_piece, Selector.new(selectors, x, y, width, height)]
+    end
+
+    sprite_pieces_with_selector_data.each do |sp, selector_data|
       begin
         sprite_piece_path = Rails.root.join('public/images', sp.path)
         sprite_piece_image = Image.read(sprite_piece_path).first
         curr_sprite_image = sprite_image.crop(
-          orientation.to_s == ActiveAssets::ActiveSprites::Sprite::Orientation::VERTICAL ? 0 : offset,
-          orientation.to_s == ActiveAssets::ActiveSprites::Sprite::Orientation::VERTICAL ? offset : 0,
-          sprite_piece_image.columns,
-          sprite_piece_image.rows
+          selector_data.x,
+          selector_data.y,
+          selector_data.width,
+          selector_data.height
         )
         curr_sprite_image_file = Tempfile.new("curr_sprite_img.ppm")
         curr_sprite_image.write "ppm:#{curr_sprite_image_file.path}"
@@ -45,8 +62,6 @@ class RunnerTest < Test::Unit::TestCase
         sprite_piece_image.write "ppm:#{curr_sprite_piece_image_bmp.path}"
         pd = percent_difference(curr_sprite_image_file.path, curr_sprite_piece_image_bmp.path)
         assert pd <= 0.25
-        offset += orientation.to_s == ActiveAssets::ActiveSprites::Sprite::Orientation::VERTICAL ?
-          sprite_piece_image.rows : sprite_piece_image.cols
       ensure
         sprite_piece_image.destroy! if sprite_piece_image
         curr_sprite_image.destroy! if curr_sprite_image

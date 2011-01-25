@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_development_dependency 'rmagick'
+  s.add_development_dependency 'css_parser', '~>1.1.5'
   s.add_development_dependency "sinatra", "~>1.1.2"
   s.add_development_dependency "thin", "~>1.2.7"
   s.add_development_dependency "rails", "~>3.0.3"
