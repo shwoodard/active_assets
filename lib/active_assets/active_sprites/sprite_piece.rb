@@ -18,6 +18,8 @@ module ActiveAssets
         end
       end
 
+      Details = Struct.new(:sprite_path, :x, :y, :width, :height)
+
       GEOMETRY_PROPS = [:x, :y, :width, :height]
       attr_reader(*GEOMETRY_PROPS)
       attr_accessor :details
