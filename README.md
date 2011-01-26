@@ -42,9 +42,9 @@ You can also include only ActiveSprites or only ActiveExpansions in your applica
 ### application.rb
     ...
     require 'rails/all'
-    require 'active\_assets/active\_expansions/railtie'
+    require 'active_assets/active_expansions/railtie'
     ... OR ...
-    require 'active\_assets/active\_sprites/railtie'
+    require 'active_assets/active_sprites/railtie'
     ...
 
 ## The dsls
