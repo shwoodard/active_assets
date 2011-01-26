@@ -88,9 +88,7 @@ It is possible to add all of the world flags!  Haha, see the following example,
 Also, you will notice that I gave a symbol for the sprite instead of a mapping.  This will assume that you wish to store your sprite at `path/to/your/public/images/sprites/world_flags.png` and you wish to store your stylesheet at `path/to/your/public/stylesheets/sprites/world_flags.css`.
 
 #### ActiveSprites configuration 
-Rmagick is used by default.  To switch to `oily_png`, which is a c extension for `chunky_png` and has the same api as `chunky_png`, apply the configuration below.
-
-In summary, if `rmagick` is installed, it will used by default. If `oily_png` is installed AND the `sprite_backend` is set to `:chunky_png` (see below), then `oliy_png` will be used.  If `oily_png` is not installed but `chunky_png` is, AND the `sprite_backend` is set to `:chunky_png` (see below), then `chunky_png` will be used.  
+Rmagick is used by default.  To switch to `oily_png`, which is a c extension for `chunky_png` and has the same api as `chunky_png`, apply the configuration below. 
 
 ##### config/application.rb
 
@@ -98,6 +96,7 @@ In summary, if `rmagick` is installed, it will used by default. If `oily_png` is
     config.active_sprites.sprite_backend = :chunky_png
     ...
 
+In summary, if `rmagick` is installed, it will used by default. If `oily_png` is installed AND the `sprite_backend` is set to `:chunky_png` (see below), then `oliy_png` will be used.  If `oily_png` is not installed but `chunky_png` is, AND the `sprite_backend` is set to `:chunky_png`, then `chunky_png` will be used. 
 
 ### Introduction to Active Expansions
 
