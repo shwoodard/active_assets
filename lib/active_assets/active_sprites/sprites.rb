@@ -56,8 +56,14 @@ module ActiveAssets
             require 'rmagick'
             RmagickRunner.new(@sprites).generate!(railtie)
           when :chunky_png
-            require 'chunky_png'
-            ChunkyPngRunner.new(@sprites).generate!(railtie)
+            begin
+              require 'oily_png'
+              ChunkyPngRunner.new(@sprites).generate!(railtie)
+            rescue LoadError
+              require 'chunky_png'
+              ChunkyPngRunner.new(@sprites).generate!(railtie)
+              raise
+            end
           end
         rescue LoadError
         end

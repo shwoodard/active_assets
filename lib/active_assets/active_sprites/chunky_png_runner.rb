@@ -3,7 +3,11 @@ require 'action_view'
 require 'rack/mount'
 require 'action_view'
 require 'fileutils'
-require 'chunky_png'
+begin
+  require 'oily_png'
+rescue LoadError
+  require 'chunky_png'
+end
 
 module ActiveAssets
   module ActiveSprites
