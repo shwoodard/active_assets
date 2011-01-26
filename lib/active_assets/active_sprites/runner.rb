@@ -18,13 +18,13 @@ module ActiveAssets
       def initialize(sprites)
         @sprites = if ENV['SPRITE']
           sprites.select do |name, sprite|
-            ENV['SPRITE'].split(',').map(&:compact).each do |sp|
+            ENV['SPRITE'].split(',').map(&:strip).any? do |sp|
               # were going to be very forgiving
               name == sp ||
               name == sp.to_sym ||
               name == ::Rack::Mount::Utils.normalize_path(sp)
             end
-          end
+          end.map(&:last)
         else
           sprites.values
         end

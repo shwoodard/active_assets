@@ -7,6 +7,9 @@ class SpriteTest < Test::Unit::TestCase
   end
 
   def teardown
+    FileUtils.rm_rf(Rails.root.join('public/images/sprites'))
+    FileUtils.rm_rf(Rails.root.join('public/stylesheets/sprites'))
+
     tear_down_assets
   end
 
