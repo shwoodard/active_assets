@@ -1,6 +1,12 @@
+require 'active_support/configurable'
+
 module ActiveAssets
   module ActiveSprites
     class Sprites
+      include ActiveSupport::Configurable
+      include Configurable
+      ActiveSupport.run_load_hooks(:active_sprites, self)
+
       def initialize
         @sprites = Hash.new do |sprites, name|
           sprites[name] = Sprite.new
@@ -45,8 +51,14 @@ module ActiveAssets
 
       def generate!(railtie = Rails.application)
         begin
-          require 'rmagick'
-          Runner.new(@sprites).generate!(railtie)
+          case sprite_backend
+          when :rmagick
+            require 'rmagick'
+            RmagickRunner.new(@sprites).generate!(railtie)
+          when :chunky_png
+            require 'chunky_png'
+            ChunkyPngRunner.new(@sprites).generate!(railtie)
+          end
         rescue LoadError
         end
       end

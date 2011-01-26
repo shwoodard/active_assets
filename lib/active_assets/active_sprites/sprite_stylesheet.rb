@@ -3,8 +3,8 @@ require 'fileutils'
 module ActiveAssets
   module ActiveSprites
     class SpriteStylesheet
-      def initialize(sprite_path, sprite_pieces)
-        @sprite_path, @sprite_pieces = sprite_path, sprite_pieces
+      def initialize(sprite_pieces)
+        @sprite_pieces = sprite_pieces
       end
 
       def write(path)

@@ -7,8 +7,10 @@ module ActiveAssets
     autoload :SpritePiece
     autoload :Sprite
     autoload :Sprites
+    autoload :Configurable
     autoload :SpriteStylesheet
-    autoload :Runner
+    autoload :RmagickRunner
+    autoload :ChunkyPngRunner
 
     def self.load_engine_tasks(engine_class)
       desc "Generate sprites"

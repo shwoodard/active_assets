@@ -74,8 +74,8 @@ class SpriteTest < Test::Unit::TestCase
   def test_url
     Rails.application.sprites do
       sprite :foobar, :url => "activecodebase.com" do
-        _"sprite_images/sprite3/1.gif" => ".klass_1"
-        _"sprite_images/sprite3/2.gif" => ".klass_2"
+        _"sprite_images/sprite3/1.png" => ".klass_1"
+        _"sprite_images/sprite3/2.png" => ".klass_2"
       end
     end
 

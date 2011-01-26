@@ -37,9 +37,9 @@ module ActiveAssets
         <<-CSS
 #{css_selector}
 {
-  width:#{width || details.width};
-  height:#{height || details.height};
-  background:url('#{details.sprite_path}') no-repeat #{x || details.x} #{y || details.y};
+  width:#{width || "#{details.width}px"};
+  height:#{height || "#{details.height}px"};
+  background:url('#{details.sprite_path}') no-repeat #{x || "#{-details.x}px"} #{y || "#{-details.y}px"};
   display:block;
 }
         CSS
