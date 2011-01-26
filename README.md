@@ -4,12 +4,22 @@ Active Assets
 A Railtie that provides a full asset management system, including support for development and deployment.  This includes building sprites, concatenating javascript and css via expansion definitions.  Active Assets includes two libraries, Active Expansions and Active Sprites.
 
     gem install rmagick
+    ... OR ...
+    gem install oily_png
+    ... OR ...
+    gem install chunky_png
+
     gem install active_assets
 
 Gemfile
 -------
 
     gem 'rmagick'
+    ... OR ...
+    gem 'oily_png'
+    ... OR ...
+    gem 'chunky_png'
+
     gem 'active_assets'
 
 In your rails app
@@ -21,7 +31,68 @@ In your rails app
     require 'active_assets/railtie'
     ...
 
+You can also include only ActiveSprites or only ActiveExpansions in your application
+
+### application.rb
+    ...
+    require 'rails/all'
+    require 'active\_assets/active\_expansions/railtie'
+    ... OR ...
+    require 'active\_assets/active\_sprites/railtie'
+    ...
+
 ## The dsls
+
+### Introduction to Active Sprites
+
+ActiveSprites allows you to generate sprites within your Rails apps with `rake sprites`!  All you need is rmagick and you are on your way. If you don't have rmagick installed, ActiveSprites will just fail silently when you try to generate the sprites. Store the images that make up your sprites in your rails project, use the dsl below to tell ActiveSprites which images to include in your sprites, the css selector the corresponds to each image in the sprite, the location to write the sprite, and the location to write the stylesheet.
+
+#### config/sprites.rb
+    Rails.application.sprites do
+      sprite 'sprites/world_flags.png' => 'sprites/world_flags.css'
+        _"sprite_images/world_flags/Argentina.gif" => ".flags.argentina"
+        _"sprite_images/world_flags/Australia.gif" => ".flags.australia"
+        ...
+      end
+    end
+
+#### To generate
+    rake sprites
+    
+or
+
+    Rails.application.sprites.generate!
+
+### More on Active Sprites
+
+It is possible to add all of the world flags!  Haha, see the following example,
+
+    Rails.application.sprites do
+      sprite :world_flags
+        Dir[Rails.root.join('public/images/sprite_images/world_flags/*.{png,gif,jpg}')].each do |path|
+          image_path = path[%r{^.*/public/images/(.*)$}, 1]
+          klass_name = ".flag.#{File.basename(image_path, File.extname(image_path)).split(' ').join('_')}"
+
+          sp image_path => klass_name
+        end
+      end
+    end
+`_` and `sp` are aliases for `sprite_piece`
+
+Also, you will notice that I gave a symbol for the sprite instead of a mapping.  This will assume that you wish to store your sprite at `path/to/your/public/images/sprites/world_flags.png` and you wish to store your stylesheet at `path/to/your/public/stylesheets/sprites/world_flags.css`.
+
+#### ActiveSprites configuration 
+Rmagick is used by default.  To switch to `oily_png`, which is a c extension for `chunky_png` and has the same api as `chunky_png`, apply the configuration below.
+
+In summary, if `rmagick` is installed, it will used by default. If `oily_png` is installed AND the `sprite_backend` is set to `:chunky_png` (see below), then `oliy_png` will be used.  If `oily_png` is not installed but `chunky_png` is, AND the `sprite_backend` is set to `:chunky_png` (see below), then `chunky_png` will be used.  
+
+##### config/application.rb
+
+    ...
+    config.active_sprites.sprite_backend = :chunky_png
+    ...
+
+
 ### Introduction to Active Expansions
 
 ActiveExpansions allow you to register Rails javascript and stylesheet expansions via a simple dsl.  Addionally, the assets in the expansion are concatenated when appropriate and the expansion delivers the concatenated (or 'cached') assets' path in the appropriate environments.  Also, files can be specified as deploy only or only for a specific environment.  For example, you may wish to include jQuery or Prototype src files in development and use minified libraries from cdn sources in production.  This is supported.
@@ -93,26 +164,6 @@ ActiveExpansions allow you to register Rails javascript and stylesheet expansion
       end
     end
 
-### Introduction to Active Sprites
-
-ActiveSprites allows you to generate sprites within your Rails apps with `rake sprites`!  All you need is rmagick and you are on your way. If you don't have rmagick installed, ActiveSprites will just fail silently when you try to generate the sprites. Store the images that make up your sprites in your rails project, use the dsl below to tell ActiveSprites which images to include in your sprites, the css selector the corresponds to each image in the sprite, the location to write the sprite, and the location to write the stylesheet.
-
-#### config/sprites.rb
-    Rails.application.sprites do
-      sprite 'sprites/world_flags.png' => 'sprites/world_flags.css'
-        _"sprite_images/world_flags/Argentina.gif" => ".flags.argentina"
-        _"sprite_images/world_flags/Australia.gif" => ".flags.australia"
-        ...
-      end
-    end
-
-#### To generate
-    rake sprites
-    
-or
-
-    Rails.application.sprites.generate!
-
 ### More on Active Expansions
 You can specify certain assets only be used in a deployment setting or only be used in a production setting.  The example below illustrates how to include a library in development and the same library from a cdn in production.  The net result will be that the library will not get cached (concatenated) along with all of the other files because it is specified for use only in development and test.  Hence, the cache file will only be comprised of the other assets in the expansion.  Similarly, the cdn resort will not get cached either but instead will be used directly.  The resulting expansion in production will include two paths, the cdn url to jquery and the path the cache file, in this case, public/{javascript,stylesheets}/cache/global.{js,css}.
 
@@ -147,21 +198,3 @@ To enable your application to cache assets when the application is initialized, 
     ...
     config.active_expansions.precache_assets = true
     ...
-
-### More on Active Sprites
-
-It is possible to add all of the world flags!  Haha, see the following example,
-
-    Rails.application.sprites do
-      sprite :world_flags
-        Dir[Rails.root.join('public/images/sprite_images/world_flags/*.{png,gif,jpg}')].each do |path|
-          image_path = path[%r{^.*/public/images/(.*)$}, 1]
-          klass_name = ".flag.#{File.basename(image_path, File.extname(image_path)).split(' ').join('_')}"
-
-          sp image_path => klass_name
-        end
-      end
-    end
-`_` and `sp` are aliases for `sprite_piece`
-
-Also, you will notice that I gave a symbol for the sprite instead of a mapping.  This will assume that you wish to store your sprite at `path/to/your/public/images/sprites/world_flags.png` and you wish to store your stylesheet at `path/to/your/public/stylesheets/sprites/world_flags.css`.
