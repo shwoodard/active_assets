@@ -36,14 +36,14 @@ class RunnerTest < Test::Unit::TestCase
 
     sprite_pieces_with_selector_data = []
 
-    parser.each_selector do |selectors, declarations, specificity|
-      sprite_piece = sprite_pieces.find {|sp| sp.css_selector == selectors }
-      width = declarations[%r{width:\s*(\d+)(?:px)?;}, 1].to_i
-      height = declarations[%r{height:\s*(\d+)(?:px)?;}, 1].to_i
-      background = declarations[%r{background:\s*([^;]+)}, 1]
+    parser.each_rule_set do |rs|
+      sprite_piece = sprite_pieces.find {|sp| rs.selectors.include?(sp.css_selector) }
+      width = rs['width'][%r{\s*(\d+)(?:px)?;?$}, 1].to_i
+      height = rs['height'][%r{\s*(\d+)(?:px)?;?$}, 1].to_i
+      background = rs['background'][%r{\s*([^;]+)}, 1]
       x = background[%r{\s-?(\d+)(?:px)?\s}, 1].to_i
       y = background[%r{\s-?(\d+)(?:px)?$}, 1].to_i
-      sprite_pieces_with_selector_data << [sprite_piece, Selector.new(selectors, x, y, width, height)]
+      sprite_pieces_with_selector_data << [sprite_piece, Selector.new(rs.selectors, x, y, width, height)]
     end
 
     sprite_pieces_with_selector_data.each do |sp, selector_data|
