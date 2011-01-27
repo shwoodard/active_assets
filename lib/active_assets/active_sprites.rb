@@ -9,9 +9,12 @@ module ActiveAssets
     autoload :Sprites
     autoload :Configurable
     autoload :SpriteStylesheet
-    autoload :RmagickRunner
-    autoload :MiniMagickRunner
-    autoload :ChunkyPngRunner
+    autoload_under "runners" do
+      autoload :AbstractRunner
+      autoload :RmagickRunner
+      autoload :MiniMagickRunner
+      autoload :ChunkyPngRunner
+    end
 
     def self.load_engine_tasks(engine_class)
       desc "Generate sprites"

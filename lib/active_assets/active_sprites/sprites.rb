@@ -54,17 +54,17 @@ module ActiveAssets
           case sprite_backend
           when :rmagick
             require 'rmagick'
-            RmagickRunner.new(@sprites).generate!(railtie)
+            RmagickRunner.new(railtie, @sprites).generate!
           when :mini_magick
             require 'mini_magick'
-            MiniMagickRunner.new(@sprites).generate!(railtie)
+            MiniMagickRunner.new(railtie, @sprites).generate!
           when :chunky_png
             begin
               require 'oily_png'
-              ChunkyPngRunner.new(@sprites).generate!(railtie)
+              ChunkyPngRunner.new(railtie, @sprites).generate!
             rescue LoadError
               require 'chunky_png'
-              ChunkyPngRunner.new(@sprites).generate!(railtie)
+              ChunkyPngRunner.new(railtie @sprites).generate!
               raise
             end
           end
