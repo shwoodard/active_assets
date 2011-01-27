@@ -10,6 +10,7 @@ module ActiveAssets
     autoload :Configurable
     autoload :SpriteStylesheet
     autoload :RmagickRunner
+    autoload :MiniMagickRunner
     autoload :ChunkyPngRunner
 
     def self.load_engine_tasks(engine_class)
