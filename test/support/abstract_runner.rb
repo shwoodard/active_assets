@@ -1,11 +1,10 @@
-require 'helper'
 require 'fileutils'
 require 'rmagick'
 require 'css_parser'
 
-class RunnerTest < Test::Unit::TestCase
+module AbstractRunnerTest
   include Magick
-  def setup
+  def runner_setup
     initialize_application_or_load_sprites!
 
     assert_false Rails.application.sprites.all.empty?

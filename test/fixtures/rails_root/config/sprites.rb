@@ -4,7 +4,7 @@ Rails.application.sprites do
     _"sprite_images/sprite3/2.png" => ".klass_2"
   end
 
-  sprite 'sprites/4.png' do
+  sprite 'sprites/4.png', :orientation => :horizontal do
     Dir[Rails.root.join('public/images/sprite_images/sprite4/*.{png,gif,jpg}')].each do |path|
       image_path = path[%r{^.*/public/images/(.*)$}, 1]
       klass_name = ".klass_#{File.basename(image_path, File.extname(image_path)).split(' ').join('_').downcase}"
