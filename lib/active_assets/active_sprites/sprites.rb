@@ -65,10 +65,10 @@ module ActiveAssets
             rescue LoadError
               require 'chunky_png'
               ChunkyPngRunner.new(railtie @sprites).generate!
-              raise
             end
           end
         rescue LoadError
+          p "#{sprite_backend}, sprite backend was not found. Either install #{sprite_backend}, or configure config.active_sprites.sprite_backend to your installed backend in application.rb. Options are :rmagick, :chunky_png, and :mini_magick"
         end
       end
     end
