@@ -9,8 +9,6 @@ require 'active_assets'
 require 'socket'
 require 'timeout'
 
-require 'raster_graphics'
-
 TEST_RAILS_ROOT = File.expand_path('../fixtures/rails_root', __FILE__)
 
 Dir[File.expand_path('../support/**/*.rb', __FILE__)].each {|f| load f }
