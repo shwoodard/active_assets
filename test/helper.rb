@@ -18,12 +18,6 @@ load File.join(TEST_RAILS_ROOT, 'config/application.rb')
 class Test::Unit::TestCase
   include RailsHelper
 
-  include(Module.new do
-    def percent_difference(image_1_path, image_2_path)
-      Pixmap.open(image_1_path) - Pixmap.open(image_2_path)
-    end
-  end)
-
   def sprites
     Rails.application.sprites
   end
