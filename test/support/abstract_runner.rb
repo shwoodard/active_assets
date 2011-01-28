@@ -12,6 +12,12 @@ module AbstractRunnerTest
     assert_nothing_raised do
       Rails.application.sprites.generate!
     end
+
+    assert File.exists?(Rails.root.join('public/images/sprites/3.png'))
+    assert File.exists?(Rails.root.join('public/images/sprites/4.png'))
+
+    assert File.exists?(Rails.root.join('public/stylesheets/sprites/3.css'))
+    assert File.exists?(Rails.root.join('public/stylesheets/sprites/4.css'))
   end
 
   def teardown
@@ -55,19 +61,11 @@ module AbstractRunnerTest
           selector_data.width,
           selector_data.height
         )
-        curr_sprite_image_file = Tempfile.new("curr_sprite_img.ppm")
-        curr_sprite_image.write "ppm:#{curr_sprite_image_file.path}"
-        curr_sprite_piece_image_bmp = Tempfile.new("curr_sprite_piece_image_bmp.ppm")
-        sprite_piece_image.write "ppm:#{curr_sprite_piece_image_bmp.path}"
-        pd = percent_difference(curr_sprite_image_file.path, curr_sprite_piece_image_bmp.path)
-        assert pd <= 0.25
+        pd = curr_sprite_image.compare_channel(sprite_piece_image, MeanSquaredErrorMetric).last
+        assert_equal 0, pd
       ensure
         sprite_piece_image.destroy! if sprite_piece_image
         curr_sprite_image.destroy! if curr_sprite_image
-        curr_sprite_image_file.close if curr_sprite_image_file
-        curr_sprite_piece_image_bmp.close if curr_sprite_piece_image_bmp
-        curr_sprite_piece_image_bmp = nil
-        curr_sprite_image_file = nil
         curr_sprite_image = nil
         sprite_piece_image = nil
       end
@@ -75,15 +73,5 @@ module AbstractRunnerTest
   ensure
     sprite_image.destroy! if sprite_image
     sprite_image = nil
-  end
-  
-  def test_sprite_exists
-    assert File.exists?(Rails.root.join('public/images/sprites/3.png'))
-    assert File.exists?(Rails.root.join('public/images/sprites/4.png'))
-  end
-  
-  def test_stylesheets_exists
-    assert File.exists?(Rails.root.join('public/stylesheets/sprites/3.css'))
-    assert File.exists?(Rails.root.join('public/stylesheets/sprites/4.css'))
   end
 end
