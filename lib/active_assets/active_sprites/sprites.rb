@@ -58,7 +58,7 @@ module ActiveAssets
           when :mini_magick
             require 'mini_magick'
             MiniMagickRunner.new(railtie, @sprites).generate!
-          when :chunky_png
+          when :chunky_png, :oily_png
             begin
               require 'oily_png'
               ChunkyPngRunner.new(railtie, @sprites).generate!

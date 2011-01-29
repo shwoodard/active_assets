@@ -32,7 +32,7 @@ module ActiveAssets
 
         if verbose
           t = Time.now
-          $stdout << "#{t}: Active Sprites: \"I'm string my run using #{runner_name}.\"\n" 
+          $stdout << "#{t}: Active Sprites: \"I'm starting my run using #{runner_name}.\"\n" 
           $stdout << "\nSprites to create:\n\"#{@sprites.map(&:path).join('", "')}\"\n"
         end
 

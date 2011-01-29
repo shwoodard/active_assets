@@ -7,5 +7,5 @@ module ActiveAssetsTest
   end
 end
 
-Rails.application.config.active_sprites.sprite_backend = :rmagick
+Rails.application.config.active_sprites.sprite_backend = :chunky_png
 Rails.application.config.active_support.deprecation = :stderr
