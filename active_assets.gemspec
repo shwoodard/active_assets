@@ -6,8 +6,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Sam Woodard"]
   s.email       = ["sam@wildfireapp.com"]
   s.homepage    = "http://github.com/shwoodard/active_assets"
-  s.summary     = %q{A Railtie that provides a full asset management system, including support for development and deployment.}
-  s.description = %q{A Railtie that provides a full asset management system, including support for development and deployment.  It is comprised of two libraries, ActiveSprites and ActiveExpansions.  ActiveSprites generates sprites and their corresponding stylesheet from dsl definition. ActiveExpansions manages javascript and css, including concatenation support for deployment, using Rails expansions plus a dsl.}
+  s.summary     = %q{A Railtie that provides an asset management system for css, javascript, and sprites in your Rails applications and engines.}
+  s.description = %q{A Railtie that provides an asset management system for css, javascript, and sprites in your Rails applications and engines. ActiveAssets includes two libraries, ActiveExpansions and ActiveSprites. ActiveSprites generates sprites defined by a dsl similar to a route definition. Similarly, ActiveExpansions' dsl creates ActionView::Helpers::AssetTagHelper javascript and stylesheet expansions, and adds additional features}
 
   s.rubyforge_project = "activeassets"
 
