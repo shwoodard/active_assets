@@ -28,7 +28,7 @@ module ActiveAssets
       end
 
       def generate!
-        verbose = ENV['VERBOSE'] != 'false' || ENV['DEBUG']
+        verbose = ENV['VERBOSE'] == 'true' || ENV['DEBUG']
 
         if verbose
           t = Time.now
