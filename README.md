@@ -1,15 +1,10 @@
 Active Assets
 =============
 
-A Railtie that provides a full asset management system, including support for development and deployment.  This includes building sprites, concatenating javascript and css via expansion definitions.  Active Assets includes two libraries, Active Expansions and Active Sprites.
+A Railtie that provides an asset management system for css, javascript, and sprites in your Rails applications and engines. ActiveAssets includes two libraries, ActiveExpansions and ActiveSprites.  ActiveSprites generates sprites defined by a dsl similar to a route definition.  Similarly, ActiveExpansions' dsl creates `ActionView::Helpers::AssetTagHelper` javascript and stylesheet expansions, and adds additional features:
 
-    gem install rmagick
-    ... OR ...
-    gem install oily_png
-    ... OR ...
-    gem install chunky_png
-
-    gem install active_assets
+* Concatenation of included assets for expansions at boot or deploy time.
+* Support for environment specific assets, so that, say, you can use one file for development and another for production or one file for development and then a cdn resource for production.
 
 Gemfile
 -------
@@ -24,11 +19,14 @@ Gemfile
       gem 'oily_png'
       ... OR ...
       gem 'chunky_png'
-      ...
+      ... OR ...
+      gem 'mini_magick
     end
     ...
 
-In your rails app
+The above order of image libraries is also the load order precedence.
+
+In your Rails app
 -----------------
 ### application.rb
 
@@ -37,9 +35,10 @@ In your rails app
     require 'active_assets/railtie'
     ...
 
-You can also include only ActiveSprites or only ActiveExpansions in your application
-
+#### You can also include only ActiveSprites or only ActiveExpansions in your application
 ### application.rb
+Instead of the above,
+
     ...
     require 'rails/all'
     require 'active_assets/active_expansions/railtie'
@@ -47,11 +46,12 @@ You can also include only ActiveSprites or only ActiveExpansions in your applica
     require 'active_assets/active_sprites/railtie'
     ...
 
-## The dsls
-
+## The DSLs
 ### Introduction to Active Sprites
 
-ActiveSprites allows you to generate sprites within your Rails apps with `rake sprites`!  All you need is rmagick and you are on your way. If you don't have rmagick installed, ActiveSprites will just fail silently when you try to generate the sprites. Store the images that make up your sprites in your rails project, use the dsl below to tell ActiveSprites which images to include in your sprites, the css selector the corresponds to each image in the sprite, the location to write the sprite, and the location to write the stylesheet.
+ActiveSprites allows you to generate sprites within your Rails apps with `rake sprites`!  All you need is `rmagick`, `chunky_png`, or `mini_magick` and you are on your way. Store the images that make up your sprites within your Rails project, use the dsl below to inform ActiveSprites of which images to include in your sprites as well as the css selector corresponding to each image, the location to write the sprite, and the location to write the stylesheet.
+
+A basic example ...
 
 #### config/sprites.rb
     Rails.application.sprites do
@@ -88,7 +88,7 @@ It is possible to add all of the world flags!  Haha, see the following example,
 Also, you will notice that I gave a symbol for the sprite instead of a mapping.  This will assume that you wish to store your sprite at `path/to/your/public/images/sprites/world_flags.png` and you wish to store your stylesheet at `path/to/your/public/stylesheets/sprites/world_flags.css`.
 
 #### ActiveSprites configuration 
-Rmagick is used by default.  To switch to `oily_png`, which is a c extension for `chunky_png` and has the same api as `chunky_png`, apply the configuration below. 
+Rmagick is used by default and is by far the fastest.  You can use one of two methods to select a backend to use.  Simply install any from the list above, and ActiveSprites, will automatically use the one that is available, OR configure ActiveSprites to use a specific backend:
 
 ##### config/application.rb
 
@@ -96,7 +96,6 @@ Rmagick is used by default.  To switch to `oily_png`, which is a c extension for
     config.active_sprites.sprite_backend = :chunky_png
     ...
 
-In summary, if `rmagick` is installed, it will used by default. If `oily_png` is installed AND the `sprite_backend` is set to `:chunky_png` (see below), then `oliy_png` will be used.  If `oily_png` is not installed but `chunky_png` is, AND the `sprite_backend` is set to `:chunky_png`, then `chunky_png` will be used. 
 
 ### Introduction to Active Expansions
 
