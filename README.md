@@ -55,7 +55,7 @@ A basic example ...
 
 #### config/sprites.rb
     Rails.application.sprites do
-      sprite 'sprites/world_flags.png' => 'sprites/world_flags.css'
+      sprite 'sprites/world_flags.png' => 'sprites/world_flags.css' do
         _"sprite_images/world_flags/Argentina.gif" => ".flags.argentina"
         _"sprite_images/world_flags/Australia.gif" => ".flags.australia"
         ...
@@ -74,7 +74,7 @@ or
 It is possible to add all of the world flags!  Haha, see the following example,
 
     Rails.application.sprites do
-      sprite :world_flags
+      sprite :world_flags do
         Dir[Rails.root.join('public/images/sprite_images/world_flags/*.{png,gif,jpg}')].each do |path|
           image_path = path[%r{^.*/public/images/(.*)$}, 1]
           klass_name = ".flag.#{File.basename(image_path, File.extname(image_path)).split(' ').join('_')}"
