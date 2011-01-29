@@ -27,27 +27,63 @@ module ActiveAssets
         end
       end
 
-      def generate!(debug = ENV['DEBUG'])
+      def generate!
+        verbose = ENV['VERBOSE'] != 'false' || ENV['DEBUG']
+
+        if verbose
+          t = Time.now
+          $stdout << "#{t}: Active Sprites: \"I'm string my run using #{runner_name}.\"\n" 
+          $stdout << "\nSprites to create:\n\"#{@sprites.map(&:path).join('", "')}\"\n"
+        end
+
         @sprites.each do |sprite|
           next if sprite.sprite_pieces.empty?
+
+          if verbose
+            t_sprite = Time.now
+            $stdout << "\n=================================================\n"
+            $stdout << "Starting Sprite, #{sprite.path}\n"
+          end
+
           sprite_path = sanitize_asset_path(context.image_path(sprite.path))
-          p "Sprite Path: #{sprite_path}" if debug
           sprite_stylesheet_path = sanitize_asset_path(context.stylesheet_path(sprite.stylesheet_path))
-          p "Sprite Stylesheet Path: #{sprite_stylesheet_path}" if debug
 
           orientation = sprite.orientation.to_s
           sprite_pieces = sprite.sprite_pieces
 
           begin
+            $stdout << "Gathering sprite details..." if verbose
             image_list, width, height = set_sprite_details_and_return_image_list(sprite, sprite_path, sprite_pieces, orientation)
+            $stdout << "done.\n" if verbose
+
+            if ENV['DEBUG']
+              $stdout << "|\tpath\t|\tselectors\t|\tx\t|\ty\t|\twidth\t|\theight\t|\n"
+              $stdout << "#{sprite_pieces.map(&:to_s).join("\n")}\n"
+            end
+
             stylesheet = SpriteStylesheet.new(sprite_pieces)
-            stylesheet.write File.join(@railtie.config.paths.public.to_a.first, sprite_stylesheet_path)
-            create_sprite(sprite, sprite_path, sprite_pieces, image_list, width, height, orientation)
-            write File.join(@railtie.config.paths.public.to_a.first, sprite_path), sprite.quality
+            stylesheet_file_path = File.join(@railtie.config.paths.public.to_a.first, sprite_stylesheet_path)
+            $stdout << "Writing stylesheet to #{stylesheet_file_path} ... " if verbose
+            stylesheet.write stylesheet_file_path
+            $stdout << "done.\n" if verbose
+
+            $stdout << "Beginning sprite generation using #{runner_name.humanize}.\n" if verbose
+            create_sprite(sprite, sprite_path, sprite_pieces, image_list, width, height, orientation, verbose)
+            $stdout << "Success!\n" if verbose
+
+            sprite_file_path = File.join(@railtie.config.paths.public.to_a.first, sprite_path)
+            $stdout << "Writing sprite to #{sprite_file_path} ... " if verbose
+            write sprite_file_path, sprite.quality
+            $stdout << "done.\n" if verbose
+
+            $stdout << "Finished #{sprite.path} in #{Time.now - t_sprite} seconds.\n" if verbose
+            $stdout << "=================================================\n\n" if verbose
           ensure
             finish
           end
         end
+
+        $stdout << "#{Time.now}: ActiveSprites \"I finished my run in #{Time.now - t} seconds.\"\n" if verbose
       end
 
       private

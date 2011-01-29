@@ -30,12 +30,14 @@ module ActiveAssets
           [image_list, width, height]
         end
 
-        def create_sprite(sprite, sprite_path, sprite_pieces, image_list, width, height, orientation)
+        def create_sprite(sprite, sprite_path, sprite_pieces, image_list, width, height, orientation, verbose)
           @sprite = ChunkyPNG::Image.new(width, height, ChunkyPNG::Color::TRANSPARENT)
 
           image_list.each_with_index do |image, i|
             @sprite.replace(image, sprite_pieces[i].details.x, sprite_pieces[i].details.y)
+            $stdout << '.' if verbose
           end
+          $stdout << "\n" if verbose
         end
 
         def write(path, quality = nil)
@@ -45,6 +47,15 @@ module ActiveAssets
 
         def finish
           @sprite = nil
+        end
+
+        def runner_name
+          begin
+            require 'oily_png'
+            'oily_png'
+          rescue LoadError
+            'chunky_png'
+          end
         end
     end
   end

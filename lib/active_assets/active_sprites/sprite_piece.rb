@@ -32,7 +32,7 @@ module ActiveAssets
         self
       end
 
-      def to_s
+      def to_css
         return '' if details.nil?
         <<-CSS
 #{css_selector}
@@ -43,6 +43,10 @@ module ActiveAssets
   display:block;
 }
         CSS
+      end
+
+      def to_s
+        "|\t#{path}\t|\t#{css_selector}\t|\t#{details.x}\t|\t#{details.y}\t|\t#{details.width}\t|\t#{details.height}\t|\n"
       end
 
       GEOMETRY_PROPS.each do |prop|

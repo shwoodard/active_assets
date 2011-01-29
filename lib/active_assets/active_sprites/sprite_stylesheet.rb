@@ -8,16 +8,15 @@ module ActiveAssets
       end
 
       def write(path)
-        to_s!
         FileUtils.mkdir_p(File.dirname(path))
         File.open(path, 'w+') do |f|
-          f.write @as_string
+          f.write to_s
         end
       end
 
       private
-        def to_s!
-          @as_string ||= @sprite_pieces.map(&:to_s).join("\n")
+        def to_s
+          @as_string ||= @sprite_pieces.map(&:to_css).join("\n")
         end
     end
   end

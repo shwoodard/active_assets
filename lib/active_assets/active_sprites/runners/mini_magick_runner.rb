@@ -30,7 +30,7 @@ module ActiveAssets
           [image_list]
         end
 
-        def create_sprite(sprite, sprite_path, sprite_pieces, image_list, width, height, orientation)
+        def create_sprite(sprite, sprite_path, sprite_pieces, image_list, width, height, orientation, verbose)
           begin
             tempfile = ImageTempfile.new(File.extname(sprite_path)[1..-1])
             tempfile.binmode
@@ -50,6 +50,8 @@ module ActiveAssets
           args << tempfile.path
 
           MiniMagick::Image.new(image_list.first.path).run_command('montage', *args)
+          image_list.size.times { $stdout << '.' } if verbose
+          $stdout << "\n" if verbose
           @sprite = MiniMagick::Image.open(tempfile.path)
         end
 
@@ -61,6 +63,10 @@ module ActiveAssets
         def finish
           @sprite.destroy! if @sprite
           @sprite = nil
+        end
+
+        def runner_name
+          'mini_magick'
         end
 
     end

@@ -30,13 +30,16 @@ module ActiveAssets
           [image_list]
         end
 
-        def create_sprite(sprite, sprite_path, sprite_pieces, image_list, width, height, orientation)
+        def create_sprite(sprite, sprite_path, sprite_pieces, image_list, width, height, orientation, verbose)
           @sprite = image_list.montage do
             self.tile = orientation == Sprite::Orientation::VERTICAL ? "1x#{sprite_pieces.size}" : "#{sprite_pieces.size}x1"
             self.geometry = "+0+0"
             self.background_color = 'transparent'
             self.matte_color = sprite.matte_color || '#bdbdbd'
           end
+
+          image_list.size.times { $stdout << '.' } if verbose
+          $stdout << "\n" if verbose
         end
 
         def write(path, quality = nil)
@@ -53,6 +56,11 @@ module ActiveAssets
           end
           @sprite = DEFAULT_SPRITE
         end
+
+        def runner_name
+          'rmagick'
+        end
+
     end
   end
 end

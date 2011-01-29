@@ -66,9 +66,31 @@ module ActiveAssets
               require 'chunky_png'
               ChunkyPngRunner.new(railtie @sprites).generate!
             end
+          else
+            begin
+              require 'rmagick'
+              RmagickRunner.new(railtie, @sprites).generate!
+            rescue LoadError
+              begin
+                begin
+                  require 'oily_png'
+                  ChunkyPngRunner.new(railtie, @sprites).generate!
+                rescue LoadError
+                  require 'chunky_png'
+                  ChunkyPngRunner.new(railtie, @sprites).generate!
+                end
+              rescue LoadError
+                require 'mini_magick'
+                MiniMagickRunner.new(railtie, @sprites).generate!
+              end
+            end
           end
-        rescue LoadError
-          p "#{sprite_backend}, sprite backend was not found. Either install #{sprite_backend}, or configure config.active_sprites.sprite_backend to your installed backend in application.rb. Options are :rmagick, :chunky_png, and :mini_magick"
+        rescue LoadError => e
+          msg = ''
+          msg << "You have not specified any sprite runtime in your configuration.  We tried to load all supported runtimes, but failed to load any." if !sprite_backend
+          msg << "Your requested backend, #{sprite_backend}, was not found." if sprite_backend
+          msg << " Supported sprite backends include :rmagick, :chunky_png, and :mini_magick.  To use oily_png, install oily_png and configure with :chunky_png.\n"
+          $stdout << msg
         end
       end
     end
