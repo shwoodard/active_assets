@@ -45,6 +45,16 @@ module ActiveAssets
         CSS
       end
 
+      def to_background_position
+        return '' if details.nil?
+        <<-CSS
+#{css_selector}
+{
+  background-position:#{x || "#{-details.x}px"} #{y || "#{-details.y}px"};
+}
+        CSS
+      end
+
       def to_s
         "|\t#{path}\t|\t#{css_selector}\t|\t#{details.x}\t|\t#{details.y}\t|\t#{details.width}\t|\t#{details.height}\t|\n"
       end

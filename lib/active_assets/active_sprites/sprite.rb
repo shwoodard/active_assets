@@ -80,6 +80,17 @@ module ActiveAssets
         raise e if e
       end
 
+      def to_css
+        <<-CSS
+#{sprite_pieces.map(&:css_selector).join(', ')}
+{
+  background:url('#{sprite_pieces.first.details.sprite_path}') no-repeat;
+  display:block;
+}
+#{sprite_pieces.map(&:to_css).join("\n")}
+        CSS
+      end
+
       private
 
         def matte_color=(val)
