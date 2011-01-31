@@ -88,7 +88,9 @@ module ActiveAssets
             if path =~ %r{^https?}
               path
             else
-              File.join(File.dirname(path), File.basename(path, ".#{asset_type_short}"))
+              dirname = File.dirname(path)
+              basename = File.basename(path, ".#{asset_type_short}")
+              dirname ==  '.' ? basename : File.join(dirname, basename)
             end
           end
         end
