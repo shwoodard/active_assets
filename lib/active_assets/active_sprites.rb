@@ -22,6 +22,8 @@ module ActiveAssets
         require 'rails'
         require 'rails/active_sprites'
 
+        ENV['VERBOSE'] ||= 'true'
+
         Rails.application ||= Class.new(Rails::Application)
         Rails.application.extend Rails::ActiveSprites
 
