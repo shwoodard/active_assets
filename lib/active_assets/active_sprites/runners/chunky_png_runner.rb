@@ -12,7 +12,7 @@ module ActiveAssets
           width, height = 0, 0
 
           image_list = sprite_pieces.map do |sp|
-            sprite_piece_path = image_full_path(sp.path)
+            sprite_piece_path = image_computed_full_path(sp.path)
             sp_image =  ChunkyPNG::Image.from_file(sprite_piece_path)
             sp.details = SpritePiece::Details.new(
               sprite.url.present? ? sprite.url : sprite_path,

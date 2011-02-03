@@ -12,7 +12,6 @@ module ActiveAssets
 
       def initialize(railtie, sprites)
         @railtie = railtie
-        setup_context
         @sprites = if ENV['SPRITE']
           sprites.select do |name, sprite|
             ENV['SPRITE'].split(',').map(&:strip).any? do |sp|
@@ -45,8 +44,8 @@ module ActiveAssets
             $stdout << "Starting Sprite, #{sprite.path}\n"
           end
 
-          sprite_path = sanitize_asset_path(context.image_path(sprite.path))
-          sprite_stylesheet_path = sanitize_asset_path(context.stylesheet_path(sprite.stylesheet_path))
+          sprite_path = image_computed_path(sprite.path)
+          sprite_stylesheet_path = stylesheet_computed_path(sprite.stylesheet_path)
 
           orientation = sprite.orientation.to_s
           sprite_pieces = sprite.sprite_pieces
@@ -87,36 +86,22 @@ module ActiveAssets
       end
 
       private
-        def image_full_path(path)
-          File.join(@railtie.config.paths.public.to_a.first, sanitize_asset_path(context.image_path(path)))
+        def image_computed_path(path)
+          File.join('images', path)
         end
 
-        def context
-          @context
+        def image_computed_full_path(path)
+          File.join(@railtie.config.paths.public.to_a.first, image_computed_path(path))
+        end
+
+        def stylesheet_computed_path(path)
+          stylesheet_full_path = @railtie.config.respond_to?(:action_controller) && @railtie.config.paths.public.stylesheets.to_a.first
+          stylesheet_path = stylesheet_full_path ? stylesheet_full_path[%r{public/(.*)}, 1] : 'stylesheets'
+          File.join(stylesheet_path, path)
         end
 
         def sanitize_asset_path(path)
           path.split('?').first
-        end
-
-        def setup_context
-          unless @railtie.config.respond_to?(:action_controller)
-            @railtie.config.action_controller = ActiveSupport::OrderedOptions.new
-
-            paths   = @railtie.config.paths
-            options = @railtie.config.action_controller
-
-            options.assets_dir           ||= paths.public.to_a.first
-            options.javascripts_dir      ||= paths.public.javascripts.to_a.first
-            options.stylesheets_dir      ||= paths.public.stylesheets.to_a.first
-
-            ActiveSupport.on_load(:action_controller) do
-              options.each { |k,v| send("#{k}=", v) }
-            end
-          end
-
-          controller = ActionController::Base.new
-          @context = AssetContext.new(@railtie.config.action_controller, {}, controller)
         end
 
     end

@@ -14,7 +14,7 @@ module ActiveAssets
           offset = 0
 
           image_list = sprite_pieces.map do |sp|
-            sp_path = image_full_path(sp.path)
+            sp_path = image_computed_full_path(sp.path)
             image = MiniMagick::Image.open(sp_path)
             sp.details = SpritePiece::Details.new(
               sprite.url.present? ? sprite.url : sprite_path,
