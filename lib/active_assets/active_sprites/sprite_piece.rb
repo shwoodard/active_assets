@@ -1,3 +1,5 @@
+require 'rack/mount'
+
 module ActiveAssets
   module ActiveSprites
     class SpritePiece
@@ -39,7 +41,7 @@ module ActiveAssets
 {
   width:#{width || "#{details.width}px"};
   height:#{height || "#{details.height}px"};
-  background:url('#{details.sprite_path}') no-repeat #{x || "#{-details.x}px"} #{y || "#{-details.y}px"};
+  background:url('#{::Rack::Mount::Utils.normalize_path(details.sprite_path)}') no-repeat #{x || "#{-details.x}px"} #{y || "#{-details.y}px"};
   display:block;
 }
         CSS
