@@ -11,7 +11,7 @@ module ActiveAssets
             sp_path = image_computed_full_path(sp.path)
             image = MiniMagick::Image.open(sp_path)
             sp.details = SpritePiece::Details.new(
-              sprite.url.present? ? sprite.url : sprite_path,
+              sprite_url(sprite, sprite_path),
               orientation == Sprite::Orientation::VERTICAL ? 0 : offset,
               orientation == Sprite::Orientation::VERTICAL ? offset : 0,
               image["width"],

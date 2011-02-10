@@ -104,6 +104,10 @@ module ActiveAssets
           path.split('?').first
         end
 
+        def sprite_url(sprite, sprite_path)
+          sprite.url.present? ? sprite.url : ::Rack::Mount::Utils.normalize_path(sprite_path)
+        end
+
     end
   end
 end

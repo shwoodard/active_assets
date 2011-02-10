@@ -36,12 +36,13 @@ module ActiveAssets
 
       def to_css
         return '' if details.nil?
+
         <<-CSS
 #{css_selector}
 {
   width:#{width || "#{details.width}px"};
   height:#{height || "#{details.height}px"};
-  background:url('#{::Rack::Mount::Utils.normalize_path(details.sprite_path)}') no-repeat #{x || "#{-details.x}px"} #{y || "#{-details.y}px"};
+  background:url('#{details.sprite_path}') no-repeat #{x || "#{-details.x}px"} #{y || "#{-details.y}px"};
   display:block;
 }
         CSS

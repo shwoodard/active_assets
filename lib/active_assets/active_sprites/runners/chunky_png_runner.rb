@@ -15,7 +15,7 @@ module ActiveAssets
             sprite_piece_path = image_computed_full_path(sp.path)
             sp_image =  ChunkyPNG::Image.from_file(sprite_piece_path)
             sp.details = SpritePiece::Details.new(
-              sprite.url.present? ? sprite.url : sprite_path,
+              sprite_url(sprite, sprite_path),
               orientation == Sprite::Orientation::VERTICAL ? 0 : width,
               orientation == Sprite::Orientation::VERTICAL ? height : 0,
               sp_image.width,
