@@ -24,7 +24,8 @@ module ActiveAssets
 
       def asset(path, options = {})
         options = HashWithIndifferentAccess.new(options)
-        options.assert_valid_keys(*Asset.members)
+        # map is for 1.9.2; HashWithIndifferentAccess bug?
+        options.assert_valid_keys(*Asset.members.map(&:to_s))
       
         inferred_type, extension = inferred_type(path)
 

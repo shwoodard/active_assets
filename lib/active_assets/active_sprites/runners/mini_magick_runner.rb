@@ -3,12 +3,6 @@ require 'mini_magick'
 module ActiveAssets
   module ActiveSprites
     class MiniMagickRunner < AbstractRunner
-      class ImageTempfile < Tempfile
-        def make_tmpname(ext, n)
-          'mini_magick%d-%d%s' % [$$, n, ext ? ".#{ext}" : '']
-        end
-      end
-
       private
         def set_sprite_details_and_return_image_list(sprite, sprite_path, sprite_pieces, orientation)
           offset = 0
@@ -32,7 +26,7 @@ module ActiveAssets
 
         def create_sprite(sprite, sprite_path, sprite_pieces, image_list, width, height, orientation, verbose)
           begin
-            tempfile = ImageTempfile.new(File.extname(sprite_path)[1..-1])
+            tempfile = Tempfile.new(File.extname(sprite_path)[1..-1])
             tempfile.binmode
           ensure
             tempfile.close
