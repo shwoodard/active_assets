@@ -1,8 +1,6 @@
 require 'active_support'
 
 module ActiveAssets
-  extend ActiveSupport::Autoload
-
-  autoload :ActiveExpansions
-  autoload :ActiveSprites
+  autoload :ActiveExpansions, 'active_assets/active_expansions'
+  autoload :ActiveSprites, 'active_assets/active_sprites'
 end
