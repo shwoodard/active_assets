@@ -12,13 +12,19 @@ module RailsHelper
   end
 
   def initialize_application_or_load_sprites!
-    load_sprites! if Rails.application && Rails.application.instance_variable_defined?(:@ran)
-    initialize_application! unless Rails.application && Rails.application.instance_variable_defined?(:@ran)
+    if Rails.application && initialized?
+      load_sprites!
+    elsif Rails.application && !initialized?
+      initialize_application!
+    end
   end
 
   def initialize_application_or_load_expansions!
-    load_assets! if Rails.application && Rails.application.instance_variable_defined?(:@ran)
-    initialize_application! unless Rails.application && Rails.application.instance_variable_defined?(:@ran)
+    if Rails.application && (Rails.version.to_i < 3 || Rails.application.instance_variable_defined?(:@ran))
+      load_assets!
+    elsif !(Rails.application && Rails.application.instance_variable_defined?(:@ran))
+      initialize_application!
+    end
   end
 
   def load_assets!
@@ -36,6 +42,12 @@ module RailsHelper
   end
 
   def initialize_application!
-    ActiveAssetsTest::Application.initialize!
+    if Rails.version.to_i >= 3
+      ActiveAssetsTest::Application.initialize!
+    end
+  end
+
+  def initialized?
+    Rails.version.to_i < 3 || Rails.application.instance_variable_defined?(:@ran)
   end
 end

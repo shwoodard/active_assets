@@ -1,5 +1,3 @@
-require 'rack/mount'
-
 module ActiveAssets
   module ActiveSprites
     class SpritePiece

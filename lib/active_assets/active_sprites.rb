@@ -12,24 +12,27 @@ module ActiveAssets
     autoload :MiniMagickRunner, 'active_assets/active_sprites/runners/mini_magick_runner'
     autoload :ChunkyPngRunner, 'active_assets/active_sprites/runners/chunky_png_runner'
 
-    def self.load_engine_tasks(engine_class)
-      desc "Generate sprites"
-      task :sprites do
-        require 'rails/application'
-        require 'rails/active_sprites'
+    def self.define_tasks
+      desc "Generate sprites."
+      task :sprites => :environment do
+        unless defined?(Rails) && Rails.respond_to?(:application)
+          require 'rails/application'
+          require 'rails/active_sprites'
+
+          Rails.application = Class.new(Rails::Application)
+          Rails.application.extend Rails::ActiveSprites
+
+          sprite_path = 'config/sprites.rb'
+
+          if File.exists?(sprite_path)
+            load sprite_path
+          else
+            exit
+          end
+        end
 
         ENV['VERBOSE'] ||= 'true'
-
-        Rails.application ||= Class.new(Rails::Application)
-        Rails.application.extend Rails::ActiveSprites
-
-        engine = engine_class.new
-        sprite_path = File.join(engine.config.paths.config.paths.first, 'sprites.rb')
-
-        if File.exists?(sprite_path)
-          load sprite_path
-          Rails.application.sprites.generate!(engine)
-        end
+        Rails.application.sprites.generate!
       end
     end
 

@@ -1,11 +1,7 @@
-require 'active_support/configurable'
-
 module ActiveAssets
   module ActiveSprites
     class Sprites
-      include ActiveSupport::Configurable
-      include Configurable
-      ActiveSupport.run_load_hooks(:active_sprites, self)
+      cattr_accessor :sprite_backend
 
       def initialize
         @sprites = Hash.new do |sprites, name|
@@ -49,39 +45,39 @@ module ActiveAssets
         @sprites.clear
       end
 
-      def generate!(railtie = Rails.application)
+      def generate!
         begin
           case sprite_backend
           when :rmagick
             require 'rmagick'
-            RmagickRunner.new(railtie, @sprites).generate!
+            RmagickRunner.new(@sprites).generate!
           when :mini_magick
             require 'mini_magick'
-            MiniMagickRunner.new(railtie, @sprites).generate!
+            MiniMagickRunner.new(@sprites).generate!
           when :chunky_png, :oily_png
             begin
               require 'oily_png'
-              ChunkyPngRunner.new(railtie, @sprites).generate!
+              ChunkyPngRunner.new(@sprites).generate!
             rescue LoadError
               require 'chunky_png'
-              ChunkyPngRunner.new(railtie @sprites).generate!
+              ChunkyPngRunner.new(@sprites).generate!
             end
           else
             begin
               require 'rmagick'
-              RmagickRunner.new(railtie, @sprites).generate!
+              RmagickRunner.new(@sprites).generate!
             rescue LoadError
               begin
                 begin
                   require 'oily_png'
-                  ChunkyPngRunner.new(railtie, @sprites).generate!
+                  ChunkyPngRunner.new(@sprites).generate!
                 rescue LoadError
                   require 'chunky_png'
-                  ChunkyPngRunner.new(railtie, @sprites).generate!
+                  ChunkyPngRunner.new(@sprites).generate!
                 end
               rescue LoadError
                 require 'mini_magick'
-                MiniMagickRunner.new(railtie, @sprites).generate!
+                MiniMagickRunner.new(@sprites).generate!
               end
             end
           end
@@ -93,6 +89,16 @@ module ActiveAssets
           $stdout << msg
         end
       end
+
+      def sprite_backend
+        @@sprite_backend
+      end
+
+      def sprite_backend=(val)
+        @@sprite_backend = val
+      end
+
+      ActiveSupport.run_load_hooks(:active_sprites, self) if ActiveSupport.respond_to?(:run_load_hooks)
     end
   end
 end

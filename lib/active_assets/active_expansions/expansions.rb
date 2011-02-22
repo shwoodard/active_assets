@@ -1,13 +1,13 @@
-require 'active_support/configurable'
-
 module ActiveAssets
   module ActiveExpansions
     class Expansions
       include AssetScope
       include TypeInferrable
-      include ActiveSupport::Configurable
-      include Configurable
-      ActiveSupport.run_load_hooks(:active_expansions, self)
+
+      @@precache_assets = false
+      cattr_accessor :precache_assets
+
+      ActiveSupport.run_load_hooks(:active_expansions, self) if ActiveSupport.respond_to?(:run_load_hooks)
 
       def initialize
         @expansions = Hash.new(&method(:build_expansions_hash_with_defaults))
@@ -69,6 +69,14 @@ module ActiveAssets
 
       def clear
         @expansions.clear
+      end
+
+      def precache_assets
+        @@precache_assets
+      end
+
+      def precache_assets=(val)
+        @@precache_assets = val
       end
 
       private

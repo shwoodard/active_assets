@@ -9,7 +9,7 @@ module ActiveAssets
       config.active_sprites = ActiveSupport::OrderedOptions.new
 
       rake_tasks do
-        Dir[File.expand_path("../../../tasks/active_sprites/*.rake", __FILE__)].each {|f| load f}
+        ActiveAssets::ActiveSprites.define_tasks
       end
 
       initializer 'active_sprites-extend-application' do

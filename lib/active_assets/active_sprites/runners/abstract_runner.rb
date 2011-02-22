@@ -1,6 +1,5 @@
 require 'action_controller'
 require 'action_view'
-require 'rack/mount'
 require 'action_view'
 require 'fileutils'
 
@@ -10,15 +9,14 @@ module ActiveAssets
       class AssetContext < ActionView::Base
       end
 
-      def initialize(railtie, sprites)
-        @railtie = railtie
+      def initialize(sprites)
         @sprites = if ENV['SPRITE']
           sprites.select do |name, sprite|
             ENV['SPRITE'].split(',').map(&:strip).any? do |sp|
               # were going to be very forgiving
               name == sp ||
               name == sp.to_sym ||
-              name == ::Rack::Mount::Utils.normalize_path(sp)
+              name == self.normalize_path(sp)
             end
           end.map(&:last)
         else
@@ -61,7 +59,7 @@ module ActiveAssets
             end
 
             stylesheet = SpriteStylesheet.new(sprite_pieces)
-            stylesheet_file_path = File.join(@railtie.config.paths.public.to_a.first, sprite_stylesheet_path)
+            stylesheet_file_path = File.join(Rails.public_path, sprite_stylesheet_path)
             $stdout << "Writing stylesheet to #{stylesheet_file_path} ... " if verbose
             stylesheet.write stylesheet_file_path
             $stdout << "done.\n" if verbose
@@ -70,7 +68,7 @@ module ActiveAssets
             create_sprite(sprite, sprite_path, sprite_pieces, image_list, width, height, orientation, verbose)
             $stdout << "Success!\n" if verbose
 
-            sprite_file_path = File.join(@railtie.config.paths.public.to_a.first, sprite_path)
+            sprite_file_path = File.join(Rails.public_path, sprite_path)
             $stdout << "Writing sprite to #{sprite_file_path} ... " if verbose
             write sprite_file_path, sprite.quality
             $stdout << "done.\n" if verbose
@@ -91,13 +89,11 @@ module ActiveAssets
         end
 
         def image_computed_full_path(path)
-          File.join(@railtie.config.paths.public.to_a.first, image_computed_path(path))
+          File.join(Rails.public_path, image_computed_path(path))
         end
 
         def stylesheet_computed_path(path)
-          stylesheet_full_path = @railtie.config.respond_to?(:action_controller) && @railtie.config.paths.public.stylesheets.to_a.first
-          stylesheet_path = stylesheet_full_path ? stylesheet_full_path[%r{public/(.*)}, 1] : 'stylesheets'
-          File.join(stylesheet_path, path)
+          File.join('stylesheets', path)
         end
 
         def sanitize_asset_path(path)
@@ -105,9 +101,25 @@ module ActiveAssets
         end
 
         def sprite_url(sprite, sprite_path)
-          sprite.url.present? ? sprite.url : ::Rack::Mount::Utils.normalize_path(sprite_path)
+          sprite.url.present? ? sprite.url : normalize_path(sprite_path)
         end
 
+        # Rack::Mount::Utils#normalize_path from rack-mount 0.6.13
+        # Normalizes URI path.
+        #
+        # Strips off trailing slash and ensures there is a leading slash.
+        #
+        #   normalize_path("/foo")  # => "/foo"
+        #   normalize_path("/foo/") # => "/foo"
+        #   normalize_path("foo")   # => "/foo"
+        #   normalize_path("")      # => "/"
+        def normalize_path(path)
+          path = "/#{path}"
+          path.squeeze!('/')
+          path.sub!(%r{/+\Z}, '')
+          path = '/' if path == ''
+          path
+        end
     end
   end
 end

@@ -1,5 +1,4 @@
 require 'active_support'
-require 'active_support/hash_with_indifferent_access'
 
 module ActiveAssets
   module ActiveExpansions

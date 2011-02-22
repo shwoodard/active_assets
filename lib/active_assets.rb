@@ -1,4 +1,5 @@
 require 'active_support'
+require 'rails/application'
 
 module ActiveAssets
   autoload :ActiveExpansions, 'active_assets/active_expansions'

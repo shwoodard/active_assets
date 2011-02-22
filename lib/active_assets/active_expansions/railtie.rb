@@ -6,7 +6,7 @@ module ActiveAssets
   module ActiveExpansions
     class Railtie < Rails::Railtie
       rake_tasks do
-        Dir[File.expand_path("../../../tasks/active_expansions/*.rake", __FILE__)].each {|f| load f}
+        ActiveAssets::ActiveExpansions.define_tasks
       end
 
       config.active_expansions = ActiveSupport::OrderedOptions.new
