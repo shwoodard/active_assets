@@ -4,8 +4,6 @@ if Rails.version.to_i <= 2
 
   module Rails
     class Application
-      # extend Rails::ActiveAssets
-
       def initialize
         Rails.configuration.instance_eval do
           def active_expansions
