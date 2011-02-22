@@ -13,6 +13,4 @@ task :environment do
   load 'test/fixtures/rails_root/config/environment.rb'
 end
 
-Dir['lib/tasks/**/*.rake'].each {|f| load f}
-
 task :default => :test
