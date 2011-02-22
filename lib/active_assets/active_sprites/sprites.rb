@@ -64,7 +64,7 @@ module ActiveAssets
               ChunkyPngRunner.new(railtie, @sprites).generate!
             rescue LoadError
               require 'chunky_png'
-              ChunkyPngRunner.new(railtie @sprites).generate!
+              ChunkyPngRunner.new(railtie, @sprites).generate!
             end
           else
             begin
