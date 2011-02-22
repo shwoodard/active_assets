@@ -15,20 +15,17 @@ module ActiveAssets
     def self.define_tasks
       desc "Generate sprites."
       task :sprites => :environment do
-        unless defined?(Rails) && Rails.respond_to?(:application)
-          require 'rails/application'
-          require 'rails/active_sprites'
+        require 'active_assets'
 
-          Rails.application = Class.new(Rails::Application)
-          Rails.application.extend Rails::ActiveSprites
+        Rails.application = Class.new(Rails::Application)
+        Rails.application.extend Rails::ActiveSprites
 
-          sprite_path = 'config/sprites.rb'
+        sprite_path = 'config/sprites'
 
-          if File.exists?(sprite_path)
-            load sprite_path
-          else
-            exit
-          end
+        if File.exists?(sprite_path)
+          require sprite_path
+        else
+          abort "No sprite configuration file at #{sprite_path}"
         end
 
         ENV['VERBOSE'] ||= 'true'

@@ -1,4 +1,3 @@
-require 'active_assets'
 require 'rails/active_assets'
 
 Rails.application.extend Rails::ActiveAssets
