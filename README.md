@@ -99,7 +99,7 @@ Rmagick is used by default and is by far the fastest.  You can use one of two me
 
 ### Introduction to Active Expansions
 
-ActiveExpansions allow you to register Rails javascript and stylesheet expansions via a simple dsl.  Addionally, the assets in the expansion are concatenated when appropriate and the expansion delivers the concatenated (or 'cached') assets' path in the appropriate environments.  Also, files can be specified as deploy only or only for a specific environment.  For example, you may wish to include jQuery or Prototype src files in development and use minified libraries from cdn sources in production.  This is supported.
+ActiveExpansions allow you to register Rails javascript and stylesheet expansions via a simple dsl.  Additionally, the assets in the expansion are concatenated when appropriate and the expansion delivers the concatenated (or 'cached') assets' path in the appropriate environments.  Also, files can be specified as deploy only or only for a specific environment.  For example, you may wish to include jQuery or Prototype src files in development and use minified libraries from cdn sources in production.  This is supported.
 
 * Below demonstration shows several variations on how to declare expansions.  Note that these declaration are redundant to demonstrate how to accomplish the same thing in different ways.
 * Alternatively you can also register your assets in multiple files.  Simply omit `config/asets.rb` and add as many .rb files as you like inside a directory `config/assets`
