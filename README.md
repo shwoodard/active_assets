@@ -1,16 +1,22 @@
 Active Assets
 =============
 
-A Railtie that provides an asset management system for css, javascript, and sprites in your Rails applications and engines. ActiveAssets includes two libraries, ActiveExpansions and ActiveSprites.  ActiveSprites generates sprites defined by a dsl similar to a route definition.  Similarly, ActiveExpansions' dsl creates `ActionView::Helpers::AssetTagHelper` javascript and stylesheet expansions, and adds additional features:
+A gem that provides an asset management system for css, javascript, and sprites in your Rails applications and engines. ActiveAssets includes two libraries, ActiveExpansions and ActiveSprites.  ActiveSprites generates sprites defined by a dsl similar to a route definition.  Similarly, ActiveExpansions' dsl creates `ActionView::Helpers::AssetTagHelper` javascript and stylesheet expansions, and adds additional features:
 
 * Concatenation of included assets for expansions at boot or deploy time.
 * Support for environment specific assets, so that, say, you can use one file for development and another for production or one file for development and then a cdn resource for production.
 
-Gemfile
--------
+Installation
+============
+
+    gem install active_assets -v 0.3.0
+
+Using Bundler?
+--------------
+### Gemfile
 
     ...
-    gem 'active_assets'
+    gem 'active_assets', '~> 0.3.0'
     ...
     group :development do
       ...
@@ -26,28 +32,14 @@ Gemfile
 
 The above order of image libraries is also the load order precedence.
 
-In your Rails app
+Run the generator
 -----------------
-### application.rb
 
-    ...
-    require 'rails/all'
-    require 'active_assets/railtie'
-    ...
+    script/generate active_assets
 
-#### You can also include only ActiveSprites or only ActiveExpansions in your application
-### application.rb
-Instead of the above,
-
-    ...
-    require 'rails/all'
-    require 'active_assets/active_expansions/railtie'
-    ... OR ...
-    require 'active_assets/active_sprites/railtie'
-    ...
-
-## The DSLs
-### Introduction to Active Sprites
+The DSLs
+========
+## Introduction to Active Sprites
 
 ActiveSprites allows you to generate sprites within your Rails apps with `rake sprites`!  All you need is `rmagick`, `chunky_png`, or `mini_magick` and you are on your way. Store the images that make up your sprites within your Rails project, use the dsl below to inform ActiveSprites of which images to include in your sprites as well as the css selector corresponding to each image, the location to write the sprite, and the location to write the stylesheet.
 
@@ -97,7 +89,7 @@ Rmagick is used by default and is by far the fastest.  You can use one of two me
     ...
 
 
-### Introduction to Active Expansions
+## Introduction to Active Expansions
 
 ActiveExpansions allow you to register Rails javascript and stylesheet expansions via a simple dsl.  Additionally, the assets in the expansion are concatenated when appropriate and the expansion delivers the concatenated (or 'cached') assets' path in the appropriate environments.  Also, files can be specified as deploy only or only for a specific environment.  For example, you may wish to include jQuery or Prototype src files in development and use minified libraries from cdn sources in production.  This is supported.
 
@@ -189,16 +181,12 @@ You can specify certain assets only be used in a deployment setting or only be u
 
 `_` and `a` are aliases for `asset`
 
-#### ActiveExpansions configuration and deployment
-By default, ActiveExpansions will not cache your assets even if `ActionController.perform_caching` is enabled.  This is because if you are not serving assets from the same server as where your application resides, then you most likely want to cache your assets at deploy time (on the front-end servers).  To cache assets manually,
+#### ActiveExpansions caching
+By default, ActiveExpansions will not cache your assets automatically.  This is because if you are not serving assets from the same server as where your application resides, then you most likely want to cache your assets at deploy time (on the front-end servers).  To cache assets, add the following to an initializer to concat assets at boot time or to your deploy scripts if you wish to do it when deploying:
 
     Rails.application.expansions.javascripts.cache!
     Rails.application.expansions.stylesheets.cache!
 
-To enable your application to cache assets when the application is initialized, i.e. boot time, follow this example,
-
-##### config/environments/production.rb
-
-    ...
-    config.active_expansions.precache_assets = true
-    ...
+Contributing
+============
+You know the drill!
