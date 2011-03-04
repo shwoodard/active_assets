@@ -48,8 +48,9 @@ Instead of the above,
     require 'active_assets/active_sprites/railtie'
     ...
 
-## The DSLs
-### Introduction to Active Sprites
+The DSLs
+========
+## Introduction to Active Sprites
 
 ActiveSprites allows you to generate sprites within your Rails apps with `rake sprites`!  All you need is `rmagick`, `chunky_png`, or `mini_magick` and you are on your way. Store the images that make up your sprites within your Rails project, use the dsl below to inform ActiveSprites of which images to include in your sprites as well as the css selector corresponding to each image, the location to write the sprite, and the location to write the stylesheet.
 
@@ -99,7 +100,7 @@ Rmagick is used by default and is by far the fastest.  You can use one of two me
     ...
 
 
-### Introduction to Active Expansions
+## Introduction to Active Expansions
 
 ActiveExpansions allow you to register Rails javascript and stylesheet expansions via a simple dsl.  Additionally, the assets in the expansion are concatenated when appropriate and the expansion delivers the concatenated (or 'cached') assets' path in the appropriate environments.  Also, files can be specified as deploy only or only for a specific environment.  For example, you may wish to include jQuery or Prototype src files in development and use minified libraries from cdn sources in production.  This is supported.
 
@@ -204,3 +205,7 @@ To enable your application to cache assets when the application is initialized, 
     ...
     config.active_expansions.precache_assets = true
     ...
+
+Contributing
+============
+Fork and stuff...you know the drill!
