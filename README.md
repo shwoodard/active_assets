@@ -1,6 +1,8 @@
 Active Assets
 =============
 
+If you are looking to use Active Assets with rails 2.3.x, visit, https://github.com/shwoodard/active_assets/tree/0-3.
+
 A Railtie that provides an asset management system for css, javascript, and sprites in your Rails applications and engines. ActiveAssets includes two libraries, ActiveExpansions and ActiveSprites.  ActiveSprites generates sprites defined by a dsl similar to a route definition.  Similarly, ActiveExpansions' dsl creates `ActionView::Helpers::AssetTagHelper` javascript and stylesheet expansions, and adds additional features:
 
 * Concatenation of included assets for expansions at boot or deploy time.
