@@ -160,4 +160,16 @@ class ExpansionsTest < Test::Unit::TestCase
     assert_equal %w{vendor/jquery.mousewheel.js bar/bas.js}, Rails.application.expansions.javascripts[:foo].assets.map(&:path)
   end
 
+  def test_expansion_with_uri
+    Rails.application.expansions do
+      expansion :cdn, :type => :js, :namespace => :fubar do
+        a '//ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/jquery-ui.min.js', :cache => false, :group => :deploy
+      end
+    end
+
+    Rails.application.expansions.javascripts.register!
+
+    assert ActionView::Helpers::AssetTagHelper.javascript_expansions.any? {|k, v| v.include?('//ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/jquery-ui.min.js')}
+  end
+
 end
