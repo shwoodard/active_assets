@@ -85,7 +85,7 @@ module ActiveAssets
 
         def cleanse_paths!(paths)
           paths.map! do |path|
-            if path =~ %r{^https?}
+            if path =~ %r{://}
               path
             else
               dirname = File.dirname(path)
