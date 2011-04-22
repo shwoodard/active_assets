@@ -5,6 +5,7 @@ Bundler::GemHelper.install_tasks
 
 Rake::TestTask.new(:test) do |t|
   t.libs << "test"
+  t.libs << "test/fixtures/rails_root/test"
   t.pattern = 'test/**/*_test.rb'
   t.verbose = true
 end

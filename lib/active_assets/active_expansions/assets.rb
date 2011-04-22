@@ -14,7 +14,7 @@ module ActiveAssets
       end
 
       def expansion_names
-        @expansion.keys
+        @expansions.keys
       end
 
       def [](expansion_name)
@@ -28,6 +28,10 @@ module ActiveAssets
 
       def paths(expansion_name)
         self[expansion_name].assets.map(&:path)
+      end
+
+      def remove(expansion_name)
+        @expansions.delete(expansion_name)
       end
 
       def asset_type
