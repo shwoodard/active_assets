@@ -1,9 +1,7 @@
 ENV['RAILS_ENV'] ||= 'test'
 
-require 'rubygems'
 require 'test/unit'
 
-require 'rails/all'
 require 'active_assets'
 
 require 'socket'

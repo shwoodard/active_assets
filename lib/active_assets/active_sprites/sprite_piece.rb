@@ -42,7 +42,7 @@ module ActiveAssets
 {
   width:#{width || "#{details.width}px"};
   height:#{height || "#{details.height}px"};
-  background:url('#{details.sprite_path}') no-repeat #{x || "#{-details.x}px"} #{y || "#{-details.y}px"};
+  background:url('#{details.sprite_path}?#{Time.now.to_i}') no-repeat #{x || "#{-details.x}px"} #{y || "#{-details.y}px"};
   display:block;
 }
         CSS

@@ -88,7 +88,7 @@ class SpriteTest < Test::Unit::TestCase
     uses_url = true
 
     parser.each_selector do |selector, declarations, specificity|
-      uses_url &= declarations[%r{url\('(.+)'\)},1] == "activecodebase.com"
+      uses_url &= declarations[%r{url\('([^\?]+)\??\d*'\)},1] == "activecodebase.com"
     end
 
     assert uses_url
