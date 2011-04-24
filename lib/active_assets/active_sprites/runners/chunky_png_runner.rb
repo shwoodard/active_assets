@@ -34,7 +34,7 @@ module ActiveAssets
           @sprite = ChunkyPNG::Image.new(width, height, ChunkyPNG::Color::TRANSPARENT)
 
           image_list.each_with_index do |image, i|
-            @sprite.replace(image, sprite_pieces[i].details.x, sprite_pieces[i].details.y)
+            @sprite.replace!(image, sprite_pieces[i].details.x, sprite_pieces[i].details.y)
             $stdout << '.' if verbose
           end
           $stdout << "\n" if verbose
