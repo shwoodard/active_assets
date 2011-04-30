@@ -10,7 +10,9 @@ module ActiveAssets
       private
         def set_sprite_details_and_return_image_list(sprite, sprite_path, sprite_pieces, orientation)
           sprite_piece_paths = sprite_pieces.map do |sp|
-            image_computed_full_path(sp.path)
+            path = image_computed_full_path(sp.path)
+            file_exists!(path)
+            path
           end
           image_list = ImageList.new(*sprite_piece_paths)
 

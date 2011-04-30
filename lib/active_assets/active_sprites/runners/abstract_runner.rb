@@ -7,8 +7,7 @@ require 'fileutils'
 module ActiveAssets
   module ActiveSprites
     class AbstractRunner
-      class AssetContext < ActionView::Base
-      end
+      class FileNotFound < StandardError; end
 
       def initialize(railtie, sprites)
         @railtie = railtie
@@ -84,6 +83,11 @@ module ActiveAssets
 
         $stdout << "#{Time.now}: ActiveSprites \"I finished my run in #{Time.now - t} seconds.\"\n" if verbose
       end
+
+      protected
+        def file_exists!(file_path)
+          raise FileNotFound.new("The file you are attempting to add to your sprite, #{file_path}, does not exists.") unless File.exists?(file_path)
+        end
 
       private
         def image_computed_path(path)
