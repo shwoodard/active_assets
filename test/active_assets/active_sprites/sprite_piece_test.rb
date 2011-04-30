@@ -1,4 +1,5 @@
 require 'helper'
+require 'css_parser'
 
 class SpritePiecetest < Test::Unit::TestCase
   def setup
@@ -6,7 +7,37 @@ class SpritePiecetest < Test::Unit::TestCase
   end
 
   def teardown
+    FileUtils.rm_rf(Rails.root.join('public/images/sprites'))
+    FileUtils.rm_rf(Rails.root.join('public/stylesheets/sprites'))
+
     tear_down_assets
+  end
+
+  def repeat_rendered(repeat = nil)
+    sp_options = {"sprite_images/sprite3/1.png" => ".klass_1"}
+    sp_options.update(:repeat => repeat) unless repeat.nil?
+
+    Rails.application.sprites do
+      sprite :sprite2 do
+        sp sp_options
+      end
+    end
+  
+    ENV['SPRITE'] = 'sprite2'
+  
+    Rails.application.sprites.generate!
+  
+    parser = CssParser::Parser.new
+    stylesheet_path = Rails.root.join('public/stylesheets/sprites/sprite2.css')
+    parser.load_file!(File.basename(stylesheet_path), File.dirname(stylesheet_path), :screen)
+
+    repeat = ''
+    parser.each_rule_set do |rs|
+      next unless rs.selectors.include?('.klass_1')
+      background = rs['background'][%r{\s*([^;]+)}, 1]
+      repeat = background[%r{\)\s*([^\s]+)}, 1]
+    end
+    repeat
   end
 
   def test_configure_with_block
@@ -61,5 +92,13 @@ class SpritePiecetest < Test::Unit::TestCase
     end
 
     assert_equal paths, Rails.application.sprites['sprites/4.png'].sprite_pieces.map(&:path)
+  end
+
+  def test_set_repeat
+    assert_equal 'repeat-y', repeat_rendered('repeat-y')
+  end
+
+  def test_do_not_set_repeat
+    assert_equal 'no-repeat', repeat_rendered
   end
 end
