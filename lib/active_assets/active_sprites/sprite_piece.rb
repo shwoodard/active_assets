@@ -22,7 +22,7 @@ module ActiveAssets
 
       Details = Struct.new(:sprite_path, :x, :y, :width, :height)
 
-      CSS_PROPS = [:x, :y, :repeat, :width, :height]
+      CSS_PROPS = [:x, :y, :repeat, :width, :height, :important]
       attr_reader(*CSS_PROPS)
       attr_accessor :details
       delegate :path, :css_selector, :to => :mapping
@@ -42,7 +42,7 @@ module ActiveAssets
 {
   width:#{width || "#{details.width}px"};
   height:#{height || "#{details.height}px"};
-  background:url('#{details.sprite_path}?#{Time.now.to_i}') #{repeat || "no-repeat"} #{x || "#{-details.x}px"} #{y || "#{-details.y}px"};
+  background:url('#{details.sprite_path}?#{Time.now.to_i}') #{repeat || "no-repeat"} #{x || "#{-details.x}px"} #{y || "#{-details.y}px"}#{" !important" if important};
   display:block;
 }
         CSS

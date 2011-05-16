@@ -13,6 +13,33 @@ class SpritePiecetest < Test::Unit::TestCase
     tear_down_assets
   end
 
+  def important_rendered(important = false)
+    sp_options = {"sprite_images/sprite3/1.png" => ".klass_1"}
+    sp_options.update(:important => important) if important
+
+    Rails.application.sprites do
+      sprite :sprite2 do
+        sp sp_options
+      end
+    end
+  
+    ENV['SPRITE'] = 'sprite2'
+  
+    Rails.application.sprites.generate!
+  
+    parser = CssParser::Parser.new
+    stylesheet_path = Rails.root.join('public/stylesheets/sprites/sprite2.css')
+    parser.load_file!(File.basename(stylesheet_path), File.dirname(stylesheet_path), :screen)
+
+    important = ''
+    parser.each_rule_set do |rs|
+      next unless rs.selectors.include?('.klass_1')
+      background = rs['background'][%r{\s*([^;]+)}, 1]
+      important = background[%r{\s+(!important)$}, 1]
+    end
+    important
+  end
+
   def repeat_rendered(repeat = nil)
     sp_options = {"sprite_images/sprite3/1.png" => ".klass_1"}
     sp_options.update(:repeat => repeat) unless repeat.nil?
@@ -100,5 +127,13 @@ class SpritePiecetest < Test::Unit::TestCase
 
   def test_do_not_set_repeat
     assert_equal 'no-repeat', repeat_rendered
+  end
+
+  def test_set_important
+    assert_equal '!important', important_rendered(true)
+  end
+
+  def test_do_not_set_important
+    assert_equal nil, important_rendered
   end
 end
