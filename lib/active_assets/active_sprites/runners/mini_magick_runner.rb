@@ -9,6 +9,7 @@ module ActiveAssets
 
           image_list = sprite_pieces.map do |sp|
             sp_path = image_computed_full_path(sp.path)
+            file_exists!(sp_path)
             image = MiniMagick::Image.open(sp_path)
             sp.details = SpritePiece::Details.new(
               sprite_url(sprite, sprite_path),

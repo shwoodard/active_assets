@@ -29,6 +29,18 @@ module AbstractRunnerTest
 
   Selector = Struct.new(:selector, :x, :y, :width, :height)
 
+  def test_file_does_not_exist
+    Rails.application.sprites do
+      sprite 'sprites/fail.png' do
+        _"sprite_images/sprite3/3.png" => ".klass_1"
+      end
+    end
+
+    assert_raises(ActiveAssets::ActiveSprites::AbstractRunner::FileNotFound) do
+      Rails.application.sprites.generate!
+    end
+  end
+
   def test_generate
     sprite = Rails.application.sprites['sprites/4.png']
     orientation = sprite.orientation
