@@ -22,7 +22,7 @@ class ApplicationControllerTest < ActionController::TestCase
 
   def teardown
     rm_rf new_assets
-    ActionView::Helpers::AssetTagHelper.javascript_expansions.delete(:new)
+    ActionView::Helpers::AssetTagHelper::JavascriptIncludeTag.expansions.delete(:new)
   end
 
   def test_index
@@ -31,15 +31,15 @@ class ApplicationControllerTest < ActionController::TestCase
   end
 
   def test_expansions
-    assert ActionView::Helpers::AssetTagHelper.javascript_expansions.any? {|k, v| k == :basfoo}
+    assert ActionView::Helpers::AssetTagHelper::JavascriptIncludeTag.expansions.any? {|k, v| k == :basfoo}
   end
 
   def test_can_add_expansion
-    assert !ActionView::Helpers::AssetTagHelper.javascript_expansions.any? {|k, v| k == :new}
+    assert !ActionView::Helpers::AssetTagHelper::JavascriptIncludeTag.expansions.any? {|k, v| k == :new}
     get :index
     write_new_assets
     get :index
-    assert ActionView::Helpers::AssetTagHelper.javascript_expansions.any? {|k, v| k == :new}
+    assert ActionView::Helpers::AssetTagHelper::JavascriptIncludeTag.expansions.any? {|k, v| k == :new}
   end
 
   def test_can_remove_expansion
@@ -47,6 +47,6 @@ class ApplicationControllerTest < ActionController::TestCase
     rm_rf new_assets
     get :index
     
-    assert !ActionView::Helpers::AssetTagHelper.javascript_expansions.any? {|k, v| k == :new}
+    assert !ActionView::Helpers::AssetTagHelper::JavascriptIncludeTag.expansions.any? {|k, v| k == :new}
   end
 end

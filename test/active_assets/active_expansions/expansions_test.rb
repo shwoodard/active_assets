@@ -169,7 +169,7 @@ class ExpansionsTest < Test::Unit::TestCase
 
     Rails.application.expansions.javascripts.register!
 
-    assert ActionView::Helpers::AssetTagHelper.javascript_expansions.any? {|k, v| v.include?('//ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/jquery-ui.min.js')}
+    assert ActionView::Helpers::AssetTagHelper::JavascriptIncludeTag.expansions.any? {|k, v| v.include?('//ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/jquery-ui.min.js')}
   end
 
 end

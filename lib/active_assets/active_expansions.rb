@@ -34,15 +34,15 @@ module ActiveAssets
     def self.remove_active_expansions
       Rails.application.expansions.javascripts.expansion_names.each do |expansion|
         Rails.application.expansions.javascripts.remove(expansion)
-        if ActionView::Helpers::AssetTagHelper.javascript_expansions.has_key?(expansion)
-          ActionView::Helpers::AssetTagHelper.javascript_expansions.delete(expansion)
+        if ActionView::Helpers::AssetTagHelper::JavascriptIncludeTag.expansions.has_key?(expansion)
+          ActionView::Helpers::AssetTagHelper::JavascriptIncludeTag.expansions.delete(expansion)
         end
       end
 
       Rails.application.expansions.stylesheets.expansion_names.each do |expansion|
         Rails.application.expansions.stylesheets.remove(expansion)
-        if ActionView::Helpers::AssetTagHelper.stylesheet_expansions.has_key?(expansion)
-          ActionView::Helpers::AssetTagHelper.stylesheet_expansions.delete(expansion)
+        if ActionView::Helpers::AssetTagHelper::StylesheetIncludeTag.expansions.has_key?(expansion)
+          ActionView::Helpers::AssetTagHelper::StylesheetIncludeTag.expansions.delete(expansion)
         end
       end
     end
