@@ -22,8 +22,8 @@ module ActiveAssets
 
       Details = Struct.new(:sprite_path, :x, :y, :width, :height)
 
-      GEOMETRY_PROPS = [:x, :y, :width, :height]
-      attr_reader(*GEOMETRY_PROPS)
+      CSS_PROPS = [:x, :y, :repeat, :width, :height, :important]
+      attr_reader(*CSS_PROPS)
       attr_accessor :details
       delegate :path, :css_selector, :to => :mapping
 
@@ -42,7 +42,7 @@ module ActiveAssets
 {
   width:#{width || "#{details.width}px"};
   height:#{height || "#{details.height}px"};
-  background:url('#{details.sprite_path}?#{Time.now.to_i}') no-repeat #{x || "#{-details.x}px"} #{y || "#{-details.y}px"};
+  background:url('#{details.sprite_path}?#{Time.now.to_i}') #{repeat || "no-repeat"} #{x || "#{-details.x}px"} #{y || "#{-details.y}px"}#{" !important" if important};
   display:block;
 }
         CSS
@@ -52,7 +52,7 @@ module ActiveAssets
         "|\t#{path}\t|\t#{css_selector}\t|\t#{details.x}\t|\t#{details.y}\t|\t#{details.width}\t|\t#{details.height}\t|\n"
       end
 
-      GEOMETRY_PROPS.each do |prop|
+      CSS_PROPS.each do |prop|
         eval <<-METH
           def #{prop}(*args)
             #{prop}, *_ = args

@@ -13,6 +13,7 @@ module ActiveAssets
 
           image_list = sprite_pieces.map do |sp|
             sprite_piece_path = image_computed_full_path(sp.path)
+            file_exists!(sprite_piece_path)
             sp_image =  ChunkyPNG::Image.from_file(sprite_piece_path)
             sp.details = SpritePiece::Details.new(
               sprite_url(sprite, sprite_path),
@@ -34,7 +35,7 @@ module ActiveAssets
           @sprite = ChunkyPNG::Image.new(width, height, ChunkyPNG::Color::TRANSPARENT)
 
           image_list.each_with_index do |image, i|
-            @sprite.replace(image, sprite_pieces[i].details.x, sprite_pieces[i].details.y)
+            @sprite.replace!(image, sprite_pieces[i].details.x, sprite_pieces[i].details.y)
             $stdout << '.' if verbose
           end
           $stdout << "\n" if verbose

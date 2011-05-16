@@ -1,10 +1,6 @@
 Active Assets
 =============
 
-### Known issue with current versions of ChunkyPng and OliyPng
-
-__In your Rails App's gemfile, if you are using ChunkyPng or ChunkyPng with OilyPng, lock down the version to ChunkyPng(0.12.0), OilyPng(0.3.0)__
-
 If you are looking to use Active Assets with rails 2.3.x, click [here](https://github.com/shwoodard/active_assets/tree/0-3).
 
 A Railtie that provides an asset management system for css, javascript, and sprites in your Rails applications and engines. ActiveAssets includes two libraries, ActiveExpansions and ActiveSprites.  ActiveSprites generates sprites defined by a dsl similar to a route definition.  Similarly, ActiveExpansions' dsl creates `ActionView::Helpers::AssetTagHelper` javascript and stylesheet expansions, and adds additional features:
