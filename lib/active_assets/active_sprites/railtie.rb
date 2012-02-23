@@ -17,9 +17,9 @@ module ActiveAssets
       end
 
       initializer 'active_sprites-load-definitons' do
-        Rails.application.config.paths.config.paths.each {|config_path| load_sprite_definition(config_path) }
+        Rails.application.config.paths['config'].each {|config_path| load_sprite_definition(config_path) }
         if config.active_sprites.load_engine_sprite_definitions
-          Rails.application.railties.engines.map(&:config).map(&:paths).map(&:config).map(&:paths).each do |config_path|
+          Rails.application.railties.engines.map(&:config).map(&:paths).map{|p| p['config']}.each do |config_path|
             load_sprite_definition(config_path)
           end
         end
