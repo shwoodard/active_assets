@@ -60,7 +60,7 @@ module ActiveAssets
             end
 
             stylesheet = SpriteStylesheet.new(sprite_pieces)
-            stylesheet_file_path = File.join(@railtie.config.paths['public'].to_a.first, sprite_stylesheet_path)
+            stylesheet_file_path = File.join(@railtie.config.paths['app/assets'].to_a[2], sprite_stylesheet_path)
             $stdout << "Writing stylesheet to #{stylesheet_file_path} ... " if verbose
             stylesheet.write stylesheet_file_path
             $stdout << "done.\n" if verbose
@@ -69,7 +69,7 @@ module ActiveAssets
             create_sprite(sprite, sprite_path, sprite_pieces, image_list, width, height, orientation, verbose)
             $stdout << "Success!\n" if verbose
 
-            sprite_file_path = File.join(@railtie.config.paths['public'].to_a.first, sprite_path)
+            sprite_file_path = File.join(@railtie.config.paths['app/assets'].to_a.first, sprite_path)
             $stdout << "Writing sprite to #{sprite_file_path} ... " if verbose
             write sprite_file_path, sprite.quality
             $stdout << "done.\n" if verbose
@@ -91,17 +91,16 @@ module ActiveAssets
 
       private
         def image_computed_path(path)
-          File.join('images', path)
+          path
         end
 
         def image_computed_full_path(path)
-          File.join(@railtie.config.paths['public'].to_a.first, image_computed_path(path))
+          File.join(@railtie.config.paths['app/assets'].to_a.first, image_computed_path(path))
         end
 
         def stylesheet_computed_path(path)
-          stylesheet_full_path = @railtie.config.respond_to?(:action_controller) && @railtie.config.paths['public/stylesheets'].to_a.first
-          stylesheet_path = stylesheet_full_path ? stylesheet_full_path[%r{public/(.*)}, 1] : 'stylesheets'
-          File.join(stylesheet_path, path)
+          # stylesheet_full_path = @railtie.config.respond_to?(:action_controller) && @railtie.config.paths['app/assets'].to_a.first
+          path
         end
 
         def sanitize_asset_path(path)
