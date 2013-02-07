@@ -42,12 +42,12 @@ module ActiveAssets
 {
   width:#{width || "#{details.width}px"};
   height:#{height || "#{details.height}px"};
-  background:url(image-path('/assets#{details.sprite_path}')) #{repeat || "no-repeat"} #{x || "#{-details.x}px"} #{y || "#{-details.y}px"}#{" !important" if important};
+  background:url(<%= asset_path('#{details.sprite_path}') %>) #{repeat || "no-repeat"} #{x || "#{-details.x}px"} #{y || "#{-details.y}px"}#{" !important" if important};
   display:block;
 }
 #{css_selector}_raw
 {
-  background:url(image-path('/assets#{details.sprite_path}')) #{repeat || "no-repeat"} #{x || "#{-details.x}px"} #{y || "#{-details.y}px"}#{" !important" if important};
+  background:url(<%= asset_path('#{details.sprite_path}') %>) #{repeat || "no-repeat"} #{x || "#{-details.x}px"} #{y || "#{-details.y}px"}#{" !important" if important};
 }
         CSS
       end
