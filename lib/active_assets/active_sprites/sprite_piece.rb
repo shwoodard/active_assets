@@ -36,18 +36,18 @@ module ActiveAssets
 
       def to_css
         return '' if details.nil?
-
+        sprite_path = details.sprite_path.sub(/^\//, '')
         <<-CSS
 #{css_selector}
 {
   width:#{width || "#{details.width}px"};
   height:#{height || "#{details.height}px"};
-  background:url(asset_path('.#{details.sprite_path}', image)) #{repeat || "no-repeat"} #{x || "#{-details.x}px"} #{y || "#{-details.y}px"}#{" !important" if important};
+  background:url(asset_path('#{sprite_path}', image)) #{repeat || "no-repeat"} #{x || "#{-details.x}px"} #{y || "#{-details.y}px"}#{" !important" if important};
   display:block;
 }
 #{css_selector}_raw
 {
-  background:url(asset_path('.#{details.sprite_path}', image)) #{repeat || "no-repeat"} #{x || "#{-details.x}px"} #{y || "#{-details.y}px"}#{" !important" if important};
+  background:url(asset_path('#{sprite_path}', image)) #{repeat || "no-repeat"} #{x || "#{-details.x}px"} #{y || "#{-details.y}px"}#{" !important" if important};
 }
         CSS
       end
