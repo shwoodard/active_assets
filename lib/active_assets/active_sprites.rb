@@ -28,7 +28,7 @@ module ActiveAssets
         Rails.application.extend Rails::ActiveSprites
 
         engine = engine_class.new
-        sprite_path = File.join(engine.config.paths.config.paths.first, 'sprites.rb')
+        sprite_path = File.join(engine.config.paths['config'].first, 'sprites.rb')
 
         if File.exists?(sprite_path)
           load sprite_path
